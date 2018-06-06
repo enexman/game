@@ -1,0 +1,24 @@
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 400;
+  font-style: normal;
+  src: local("Gilroy Regular"), local("Gilroy-Regular"),
+  url("../fonts/gilroylight.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-style: normal;
+  src: local("Gilroy Bold"), local("Gilroy-Bold"),
+  url("../fonts/gilroyextrabold.woff2") format("woff2");
+}
+
+body {
+  font-family: Gilroy, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: $green;
+  background-color: $black;
+}

@@ -12,11 +12,13 @@
   <!-- endbuild -->
 </head>
 <body>
-  <!--[if lt IE 11]>
-      <p class="browsehappy">Ваш браузер <strong>устарел</strong>.
-          Пожалуйста<a href="http://browsehappy.com/">обновите</a> его.</p>
-  <![endif]-->
-  <h1>Привет, Мир!</h1>
+  <main class="game">
+    <form class="game-start">
+      <label for="name">Имя героя:</label>
+      <input id="name" type="text" autocomplete="off">
+      <button type="submit">Пуск</button>
+    </form>
+  </main>
   <!-- build:js js/script.min.js -->
   <script src="./js/script.js"></script>
   <!-- endbuild -->
