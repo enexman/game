@@ -41,9 +41,8 @@ body {
     border: 1px solid #00f70c;
     background-color: black;
     color: #00f70c;
-    text-transform: uppercase; }
-    .game-start input:focus, .game-start input:hover {
-      box-shadow: inset 0 0 5px 0 #00f70c; }
+    text-transform: uppercase;
+    transition: all .2s; }
   .game-start button {
     outline: none;
     background-color: black;
@@ -51,6 +50,37 @@ body {
     color: #00f70c;
     font-size: 13px;
     padding: 5px 10px;
-    text-transform: uppercase; }
+    text-transform: uppercase;
+    transition: all .3s; }
     .game-start button:focus, .game-start button:hover {
-      box-shadow: inset 0 0 5px 0 #00f70c; }
+      background-color: #00f70c;
+      color: #000;
+      font-weight: 700; }
+
+.game-create {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateY(-50%) translateX(-50%);
+          transform: translateY(-50%) translateX(-50%);
+  border: 1px solid #00f70c;
+  padding: 20px; }
+  .game-create__btn {
+    outline: none;
+    display: block;
+    background-color: black;
+    border: 1px solid #00f70c;
+    color: #00f70c;
+    font-size: 13px;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    transition: all .3s; }
+    .game-create__btn--start-game {
+      margin-bottom: 10px; }
+    .game-create__btn:focus, .game-create__btn:hover {
+      background-color: #00f70c;
+      color: #000;
+      font-weight: 700; }

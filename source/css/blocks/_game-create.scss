@@ -1,5 +1,7 @@
-.game-start {
+.game-create {
 
+  display: flex;
+  flex-direction: column;
   width: 250px;
   position: absolute;
   left: 50%;
@@ -8,29 +10,9 @@
   border: 1px solid $green;
   padding: 20px;
 
-  label {
+  &__btn {
+    outline: none;
     display: block;
-    margin-bottom: 10px;
-  }
-  input {
-    outline: none;
-    padding: 5px 10px;
-    width: 165px;
-    border: 1px solid $green;
-    background-color: $black;
-    color: $green;
-    text-transform: uppercase;
-    transition: all .2s;
-
-    &:focus,
-    &:hover {
-      //box-shadow: 0 0 5px 1px $green;
-      //outline: 1px solid $green;
-    }
-  }
-
-  button {
-    outline: none;
     background-color: $black;
     border: 1px solid $green;
     color: $green;
@@ -39,12 +21,15 @@
     text-transform: uppercase;
     transition: all .3s;
 
+    &--start-game {
+      margin-bottom: 10px;
+    }
+
     &:focus,
     &:hover {
       background-color: $green;
       color: #000;
       font-weight: 700;
-      //box-shadow: 0 0 0 1px $green;
     }
   }
 }

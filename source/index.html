@@ -2,7 +2,7 @@
 <html lang="ru-RU">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>Подземелье</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="Murat Barkinkhoev">
@@ -12,7 +12,11 @@
   <!-- endbuild -->
 </head>
 <body>
-  <main class="game">
+  <main class="game" style="display: none">
+    <div class="game-create">
+      <button class="game-create__btn  game-create__btn--enter-game">Войти в игру</button>
+      <button class="game-create__btn  game-create__btn--new-game">Новая игра</button>
+    </div>
     <form class="game-start">
       <label for="name">Имя героя:</label>
       <input id="name" type="text" autocomplete="off">

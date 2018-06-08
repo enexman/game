@@ -44,5 +44,8 @@
     "stylelint": "stylelint \"source/css/**/*.scss\" --syntax scss",
     "test": "npm run editorconfig && npm run stylelint",
     "watch-js": "webpack --watch"
+  },
+  "dependencies": {
+    "jquery": "3.3.1"
   }
 }
