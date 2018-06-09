@@ -105,10 +105,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GameCreate; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _game_start__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 /**
  * Created by Murat on 07.06.2018.
  */
+
 
 
 
@@ -136,7 +138,14 @@ class GameCreate extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
     const uid = JSON.parse(localStorage.getItem(`uid`));
     console.log('uid', uid);
     if(uid) {
-      new _main__WEBPACK_IMPORTED_MODULE_2__["default"]();
+      Object(_backend__WEBPACK_IMPORTED_MODULE_3__["loadUser"])(
+        (res) => {
+          console.log('onSuccess', res);
+          new _room__WEBPACK_IMPORTED_MODULE_2__["default"](res);
+        },
+        (res) => console.log('onError', res),
+        uid
+      );
       return;
     }
     new _game_start__WEBPACK_IMPORTED_MODULE_1__["default"]();
@@ -151,7 +160,6 @@ class GameCreate extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
     this.clickNewGameBtnHandler = this.clickNewGameBtnHandler.bind(this);
     this.newGameBtn.addEventListener('click', this.clickNewGameBtnHandler);
   }
-  removeEventListeners() {}
 }
 
 
@@ -172,9 +180,9 @@ class Render {
     template.innerHTML = htmlString;
     return template.content;
   }
-  appendToTree() {
-    document.body.innerHTML = ``;
-    document.body.appendChild(this.element);
+  appendToTree(container = document.body) {
+    container.innerHTML = ``;
+    container.appendChild(this.element);
   }
   getElement() {
     return this.element;
@@ -190,8 +198,8 @@ class Render {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GameStart; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 /**
  * Created by Murat on 07.06.2018.
  */
@@ -209,6 +217,7 @@ class GameStart extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
     this.startGameBtn = this.element.querySelector('.game-start__submit');
     this.addEventListeners();
     this.appendToTree();
+    this.gameInput.focus();
     console.log('GameStart');
   }
 
@@ -220,28 +229,24 @@ class GameStart extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
         <button class="game-start__submit" type="submit">Пуск</button>
       </form>`;
   }
-  changeGameInputHandler() {
-  }
+
   clickGameStartBtnHandler(evt) {
     evt.preventDefault();
-    const uid = this.gameInput.value + Date.now();
-    localStorage.setItem(`uid`, JSON.stringify(uid.toLowerCase()));
-    console.log('clickGameStartBtnHandler', uid);
-    Object(_backend__WEBPACK_IMPORTED_MODULE_2__["createUserUid"])(
-      (res) => console.log('onSuccess', res),
+    const uid = this.gameInput.value.toLowerCase() + Date.now();
+    localStorage.setItem(`uid`, JSON.stringify(uid));
+    Object(_backend__WEBPACK_IMPORTED_MODULE_2__["createUser"])(
+      (res) => {
+        console.log('onSuccess', res);
+        new _room__WEBPACK_IMPORTED_MODULE_1__["default"](res);
+      },
       (res) => console.log('onError', res),
       uid
     );
-    new _main__WEBPACK_IMPORTED_MODULE_1__["default"]();
   }
   addEventListeners() {
-    this.changeGameInputHandler = this.changeGameInputHandler.bind(this);
-    this.gameInput.addEventListener('click', this.changeGameInputHandler);
-
     this.clickGameStartBtnHandler = this.clickGameStartBtnHandler.bind(this);
     this.startGameBtn.addEventListener('click', this.clickGameStartBtnHandler);
   }
-  removeEventListeners() {}
 }
 
 
@@ -251,8 +256,118 @@ class GameStart extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createUserUid", function() { return createUserUid; });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Main; });
+/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/**
+ * Created by Murat on 08.06.2018.
+ */
+
+
+class Main extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
+  constructor(gameData) {
+    super();
+    this.gameData = gameData;
+    this.htmlString = this.getHtmlString();
+    this.element = this.createElement(this.htmlString);
+    this.navigation = this.element.querySelector('.navigation');
+    this.addEventListeners();
+    this.appendToTree();
+    console.log('Room');
+  }
+
+  getHtmlString() {
+    const navigation = this.gameData.room.navigation.map((it) => {
+      let text =``;
+      switch (it) {
+        case `left` : text = `Пойти на лево`;
+          break;
+        case `forward` : text = `Идти прямо`;
+          break;
+        case `run` : text = `Бежать без оглядки`;
+          break;
+        case `fight` : text = `Принять бой`;
+          break;
+        case `right` : text = `Пойти на право`;
+          break;
+      }
+      return `
+        <div class="navigation__group">
+          <input type="radio" id="${it}" name="navigation" value="${it}">
+          <label for="${it}" class="navigation__label">${text}</label>
+        </div>`
+    }).join(``);
+    return `  
+      <div class="room">
+        <div class="room__stat  stat">
+          <div class="stat__level">Level: <span class="stat__level-num">${this.gameData.level}</span></div>
+          <div class="stat__move">Move: <span class="stat__move-num">${this.gameData.move}</span></div>
+        </div>
+        <div class="stat__line"></div>
+        <p class="stat__event">${this.gameData.room.event}</p>
+        <form class="room__navigation  navigation">
+          ${navigation}
+        </form>
+        <div class="room__hero  hero">
+          <div class="hero__wrap">
+            <ul class="hero__skills">
+              <li class="hero__skill">Name: <span>${this.gameData.name}</span></li>
+              <li class="hero__skill">Level: <span>${this.gameData.level}</span></li>
+              <li class="hero__skill">Strength: <span>${this.gameData.strength}</span></li>
+              <li class="hero__skill">Agility: <span>${this.gameData.agility}</span></li>
+              <li class="hero__skill">Luck: <span>${this.gameData.luck}</span></li>
+            </ul>
+            <ul class="hero__inventory">
+              <li class="hero__weapon hero__weapon--head">Голова: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--body">Тело: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Правая рука: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Левая рука: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--feet">Ноги: <span>${this.gameData.weapons.head}</span></li>
+            </ul>
+            <a href="#" class="hero__link">
+              <img src="img/hero.jpg" alt="hero image" class="hero__image">
+            </a>
+          </div>
+          <ul class="hero__impacts">
+            <li class="hero__negative" title="Негативное"></li>
+            <li class="hero__positive" title="Позитивное"></li>
+            <li class="hero__positive" title="Позитивное"></li>
+            <li class="hero__positive" title="Позитивное"></li>
+          </ul>
+        </div>
+      </div>`;
+  }
+
+  clickNavigationHandler(evt) {
+    switch (evt.target.value) {
+      case `left` : console.log(`Пойти на лево`);
+        break;
+      case `forward` : console.log(`Идти прямо`);
+        break;
+      case `run` : console.log(`Бежать без оглядки`);
+        break;
+      case `fight` : console.log(`Принять бой`);
+        break;
+      case `right` : console.log(`Пойти на право`);
+        break;
+    }
+  }
+  addEventListeners() {
+    this.clickNavigationHandler = this.clickNavigationHandler.bind(this);
+    this.navigation.addEventListener('click', this.clickNavigationHandler);
+  }
+}
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createUser", function() { return createUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadUser", function() { return loadUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateUser", function() { return updateUser; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * Created by Murat on 07.06.2018.
@@ -262,11 +377,11 @@ __webpack_require__.r(__webpack_exports__);
 // const API = 'https://quiet-island-38343.herokuapp.com/api/';
 const API = 'http://127.0.0.1:5000/api/';
 
-function createUserUid (onSuccess, onError, uid) {
+function createUser (onSuccess, onError, uid) {
   const settings = {
     async: true,
     crossDomain: true,
-    url: `${API}uid`,
+    url: `${API}uid/create`,
     method: 'POST',
     data: {
       uid
@@ -281,9 +396,45 @@ function createUserUid (onSuccess, onError, uid) {
     .fail(error => onError(error.status))
 }
 
+function loadUser (onSuccess, onError, uid) {
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: `${API}uid/load`,
+    method: 'POST',
+    data: {
+      uid
+    },
+    headers: {
+      accept: 'application/json'
+    }
+  };
+
+  jquery__WEBPACK_IMPORTED_MODULE_0___default.a.ajax(settings)
+    .done(response => onSuccess(response))
+    .fail(error => onError(error.status))
+}
+
+function updateUser (onSuccess, onError, data) {
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: `${API}uid/update`,
+    method: 'POST',
+    data,
+    headers: {
+      accept: 'application/json'
+    }
+  };
+
+  jquery__WEBPACK_IMPORTED_MODULE_0___default.a.ajax(settings)
+    .done(response => onSuccess(response))
+    .fail(error => onError(error.status))
+}
+
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10651,47 +10802,6 @@ if ( !noGlobal ) {
 
 return jQuery;
 } );
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Main; });
-/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/**
- * Created by Murat on 08.06.2018.
- */
-
-
-class Main extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor() {
-    super();
-    this.htmlString = this.getHtmlString();
-    this.element = this.createElement(this.htmlString);
-    this.enterGameBtn = this.element.querySelector('h1');
-    this.addEventListeners();
-    this.appendToTree();
-    console.log('Main');
-  }
-
-  getHtmlString() {
-    return `  
-      <div class="main">
-        <h1>Главный экран игры</h1>
-      </div>`;
-  }
-  clickStartGameBtnHandler() {
-
-  }
-  addEventListeners() {
-    this.clickStartGameBtnHandler = this.clickStartGameBtnHandler.bind(this);
-    this.enterGameBtn.addEventListener('click', this.clickStartGameBtnHandler);
-  }
-  removeEventListeners() {}
-}
 
 
 /***/ })

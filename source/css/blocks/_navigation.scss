@@ -1,0 +1,55 @@
+.navigation {
+  font-weight: 400;
+  padding-left: 40px;
+  min-height: 87px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+
+  &__group {
+    margin-bottom: 10px;
+  }
+
+  &__group:first-child{
+    margin-top: 5px;
+  }
+
+  &__group:last-child {
+    margin-bottom: 5px;
+  }
+
+  &__label {
+    margin-left: 50px;
+    position: relative;
+
+    &::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      position: absolute;
+      left: -33px;
+      top: 1px;
+      border: 2px solid $green;
+      border-radius: 50%;
+    }
+
+    &::after {
+      display: none;
+      content: "";
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      left: -28px;
+      top: 6px;
+      background-color: $green;
+      border-radius: 50%;
+    }
+  }
+
+  input {
+    @include visually-hidden();
+    &:checked ~.navigation__label::after {
+      display: block;
+    }
+  }
+}

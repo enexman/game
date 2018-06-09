@@ -11,18 +11,25 @@
   src: local("Gilroy Bold"), local("Gilroy-Bold"), url("../fonts/gilroyextrabold.woff2") format("woff2"); }
 
 body {
+  margin: 0;
+  padding: 0;
   font-family: Gilroy, sans-serif;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 16px;
-  text-transform: uppercase;
   color: #00f70c;
   background-color: black; }
+
+img {
+  height: 100%;
+  width: 100%;
+  display: block; }
 
 .game {
   width: 768px;
   margin: 0 auto; }
 
 .game-start {
+  font-weight: 700;
   width: 250px;
   position: absolute;
   left: 50%;
@@ -30,7 +37,8 @@ body {
   -webkit-transform: translateY(-50%) translateX(-50%);
           transform: translateY(-50%) translateX(-50%);
   border: 1px solid #00f70c;
-  padding: 20px; }
+  padding: 20px;
+  text-transform: uppercase; }
   .game-start label {
     display: block;
     margin-bottom: 10px; }
@@ -58,6 +66,7 @@ body {
       font-weight: 700; }
 
 .game-create {
+  font-weight: 700;
   display: flex;
   flex-direction: column;
   width: 250px;
@@ -83,4 +92,127 @@ body {
     .game-create__btn:focus, .game-create__btn:hover {
       background-color: #00f70c;
       color: #000;
+      font-weight: 700; }
+
+.room {
+  width: 768px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateY(-50%) translateX(-50%);
+          transform: translateY(-50%) translateX(-50%); }
+
+.stat {
+  display: flex;
+  padding: 0 20px; }
+  .stat__event {
+    margin: 10px 0;
+    padding: 5px 20px;
+    font-weight: 400;
+    min-height: 80px;
+    text-align: justify; }
+  .stat__level {
+    margin-left: 20px;
+    padding: 0 10px;
+    background: black;
+    font-weight: 700; }
+  .stat__move {
+    margin-left: 70px;
+    padding: 0 10px;
+    background: black;
+    font-weight: 700; }
+  .stat__line {
+    margin-top: -10px;
+    width: auto;
+    height: 1px;
+    background-color: #00f70c; }
+
+.navigation {
+  font-weight: 400;
+  padding-left: 40px;
+  min-height: 87px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column; }
+  .navigation__group {
+    margin-bottom: 10px; }
+  .navigation__group:first-child {
+    margin-top: 5px; }
+  .navigation__group:last-child {
+    margin-bottom: 5px; }
+  .navigation__label {
+    margin-left: 50px;
+    position: relative; }
+    .navigation__label::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      position: absolute;
+      left: -33px;
+      top: 1px;
+      border: 2px solid #00f70c;
+      border-radius: 50%; }
+    .navigation__label::after {
+      display: none;
+      content: "";
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      left: -28px;
+      top: 6px;
+      background-color: #00f70c;
+      border-radius: 50%; }
+  .navigation input {
+    position: absolute;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px; }
+    .navigation input:checked ~ .navigation__label::after {
+      display: block; }
+
+.hero {
+  margin: 10px 0;
+  padding: 5px 20px;
+  border-bottom: 1px solid #00f70c; }
+  .hero__wrap {
+    display: flex; }
+  .hero__skills {
+    padding: 0;
+    margin: 0; }
+  .hero__skill {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 8px; }
+    .hero__skill span {
+      font-weight: 700; }
+  .hero__impacts {
+    padding: 0;
+    list-style: none;
+    display: flex; }
+    .hero__impacts li {
+      margin-left: 10px; }
+  .hero__negative {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #f71f00; }
+  .hero__positive {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #00f70c; }
+  .hero__link {
+    margin-left: 100px;
+    display: block;
+    width: 150px;
+    height: 135px; }
+  .hero__inventory {
+    margin: 0;
+    padding: 0;
+    margin-left: auto;
+    list-style: none; }
+  .hero__weapon {
+    margin-bottom: 8px; }
+    .hero__weapon span {
       font-weight: 700; }

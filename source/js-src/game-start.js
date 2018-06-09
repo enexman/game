@@ -2,8 +2,8 @@
  * Created by Murat on 07.06.2018.
  */
 import Render from './render';
-import Main from './main';
-import { createUserUid } from './backend';
+import Room from './room';
+import { createUser } from './backend';
 
 export default class GameStart extends Render {
   constructor() {
@@ -15,6 +15,7 @@ export default class GameStart extends Render {
     this.startGameBtn = this.element.querySelector('.game-start__submit');
     this.addEventListeners();
     this.appendToTree();
+    this.gameInput.focus();
     console.log('GameStart');
   }
 
@@ -26,26 +27,22 @@ export default class GameStart extends Render {
         <button class="game-start__submit" type="submit">Пуск</button>
       </form>`;
   }
-  changeGameInputHandler() {
-  }
+
   clickGameStartBtnHandler(evt) {
     evt.preventDefault();
-    const uid = this.gameInput.value + Date.now();
-    localStorage.setItem(`uid`, JSON.stringify(uid.toLowerCase()));
-    console.log('clickGameStartBtnHandler', uid);
-    createUserUid(
-      (res) => console.log('onSuccess', res),
+    const uid = this.gameInput.value.toLowerCase() + Date.now();
+    localStorage.setItem(`uid`, JSON.stringify(uid));
+    createUser(
+      (res) => {
+        console.log('onSuccess', res);
+        new Room(res);
+      },
       (res) => console.log('onError', res),
       uid
     );
-    new Main();
   }
   addEventListeners() {
-    this.changeGameInputHandler = this.changeGameInputHandler.bind(this);
-    this.gameInput.addEventListener('click', this.changeGameInputHandler);
-
     this.clickGameStartBtnHandler = this.clickGameStartBtnHandler.bind(this);
     this.startGameBtn.addEventListener('click', this.clickGameStartBtnHandler);
   }
-  removeEventListeners() {}
 }

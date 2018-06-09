@@ -1,0 +1,33 @@
+.stat {
+  display: flex;
+  padding: 0 20px;
+
+  &__event {
+    margin: 10px 0;
+    padding: 5px 20px;
+    font-weight: 400;
+    min-height: 80px;
+    text-align: justify;
+  }
+
+  &__level {
+    margin-left: 20px;
+    padding: 0 10px;
+    background: $black;
+    font-weight: 700;
+  }
+
+  &__move {
+    margin-left: 70px;
+    padding: 0 10px;
+    background: $black;
+    font-weight: 700;
+  }
+
+  &__line {
+    margin-top: -10px;
+    width: auto;
+    height: 1px;
+    background-color: $green;
+  }
+}

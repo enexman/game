@@ -1,5 +1,5 @@
 .game-start {
-
+  font-weight: 700;
   width: 250px;
   position: absolute;
   left: 50%;
@@ -7,6 +7,7 @@
   transform: translateY(-50%) translateX(-50%);
   border: 1px solid $green;
   padding: 20px;
+  text-transform: uppercase;
 
   label {
     display: block;

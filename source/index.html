@@ -12,16 +12,76 @@
   <!-- endbuild -->
 </head>
 <body>
+
   <main class="game" style="display: none">
+
     <div class="game-create">
       <button class="game-create__btn  game-create__btn--enter-game">Войти в игру</button>
       <button class="game-create__btn  game-create__btn--new-game">Новая игра</button>
     </div>
+
     <form class="game-start">
       <label for="name">Имя героя:</label>
       <input id="name" type="text" autocomplete="off">
       <button type="submit">Пуск</button>
     </form>
+
+    <div class="room">
+      <div class="room__stat  stat">
+        <div class="stat__level">Level: <span class="stat__level-num">1</span></div>
+        <div class="stat__move">Move: <span class="stat__move-num">1</span></div>
+      </div>
+      <div class="stat__line"></div>
+      <p class="stat__event">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        Consectetur dolorem eos, ex laborum minus nisi omnis veritatis.
+        Amet, consectetur cumque dignissimos distinctio doloremque dolores
+        facere facilis in inventore ipsam ipsum iste maxime minima modi mollitia
+        non, obcaecati odio officia, pariatur placeat quas quisquam ratione
+        repellendus saepe sunt ut vel velit.
+      </p>
+      <form class="room__navigation  navigation">
+        <div class="navigation__group">
+          <input type="radio" id="left" name="navigation" value="left">
+          <label for="left" class="navigation__label">Пойти на лево</label>
+        </div>
+        <div class="navigation__group">
+          <input type="radio" id="forward" name="navigation" value="forward">
+          <label for="forward" class="navigation__label">Пойти вперед</label>
+        </div>
+        <div class="navigation__group">
+          <input type="radio" id="run" name="navigation" value="forward">
+          <label for="run" class="navigation__label">Бежать</label>
+        </div>
+      </form>
+      <div class="room__hero  hero">
+        <div class="hero__wrap">
+          <ul class="hero__skills">
+            <li class="hero__skill">Name: <span>Hero</span></li>
+            <li class="hero__skill">Level: <span>1</span></li>
+            <li class="hero__skill">Strength: <span>1</span></li>
+            <li class="hero__skill">Agility: <span>1</span></li>
+            <li class="hero__skill">Luck: <span>1</span></li>
+          </ul>
+          <ul class="hero__inventory">
+            <li class="hero__weapon hero__weapon--head">Шлем: <span>5</span></li>
+            <li class="hero__weapon hero__weapon--body">Доспехи: <span>5</span></li>
+            <li class="hero__weapon hero__weapon--hand">Мечь смертоносный: <span>5</span></li>
+            <li class="hero__weapon hero__weapon--hand">Щит: <span>5</span></li>
+            <li class="hero__weapon hero__weapon--feet">Сапожки: <span>5</span></li>
+          </ul>
+          <a href="#" class="hero__link">
+            <img src="img/hero.jpg" alt="hero image" class="hero__image">
+          </a>
+        </div>
+        <ul class="hero__impacts">
+          <li class="hero__negative" title="Негативное"></li>
+          <li class="hero__positive" title="Позитивное"></li>
+          <li class="hero__positive" title="Позитивное"></li>
+          <li class="hero__positive" title="Позитивное"></li>
+        </ul>
+      </div>
+    </div>
   </main>
   <!-- build:js js/script.min.js -->
   <script src="./js/script.js"></script>

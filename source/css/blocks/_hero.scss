@@ -1,0 +1,71 @@
+.hero {
+  margin: 10px 0;
+  padding: 5px 20px;
+  border-bottom: 1px solid $green;
+
+  &__wrap {
+    display: flex;
+  }
+
+  &__skills {
+    padding: 0;
+    margin: 0;
+
+  }
+
+  &__skill {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 8px;
+
+    span {
+      font-weight: 700;
+    }
+  }
+
+  &__impacts {
+    padding: 0;
+    list-style: none;
+    display: flex;
+
+    li {
+      margin-left: 10px;
+    }
+  }
+
+  &__negative {
+    width: $ball-size;
+    height: $ball-size;
+    border-radius: 50%;
+    background: $red;
+  }
+
+  &__positive {
+    width: $ball-size;
+    height: $ball-size;
+    border-radius: 50%;
+    background: $green;
+  }
+
+  &__link {
+    margin-left: 100px;
+    display: block;
+    width: 150px;
+    height: 135px;
+  }
+
+  &__inventory {
+    margin: 0;
+    padding: 0;
+    margin-left: auto;
+    list-style: none;
+  }
+
+  &__weapon {
+    margin-bottom: 8px;
+
+    span {
+      font-weight: 700;
+    }
+  }
+}

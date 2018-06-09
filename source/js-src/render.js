@@ -8,9 +8,9 @@ export default class Render {
     template.innerHTML = htmlString;
     return template.content;
   }
-  appendToTree() {
-    document.body.innerHTML = ``;
-    document.body.appendChild(this.element);
+  appendToTree(container = document.body) {
+    container.innerHTML = ``;
+    container.appendChild(this.element);
   }
   getElement() {
     return this.element;

@@ -3,7 +3,8 @@
  */
 import Render from './render';
 import GameStart from './game-start';
-import Main from './main';
+import Room from './room';
+import { loadUser } from './backend';
 
 export default class GameCreate extends Render {
   constructor() {
@@ -28,7 +29,14 @@ export default class GameCreate extends Render {
     const uid = JSON.parse(localStorage.getItem(`uid`));
     console.log('uid', uid);
     if(uid) {
-      new Main();
+      loadUser(
+        (res) => {
+          console.log('onSuccess', res);
+          new Room(res);
+        },
+        (res) => console.log('onError', res),
+        uid
+      );
       return;
     }
     new GameStart();
@@ -43,5 +51,4 @@ export default class GameCreate extends Render {
     this.clickNewGameBtnHandler = this.clickNewGameBtnHandler.bind(this);
     this.newGameBtn.addEventListener('click', this.clickNewGameBtnHandler);
   }
-  removeEventListeners() {}
 }
