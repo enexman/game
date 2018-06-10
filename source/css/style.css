@@ -87,7 +87,8 @@ img {
     font-size: 13px;
     padding: 5px 10px;
     text-transform: uppercase;
-    transition: all .3s; }
+    transition: all .3s;
+    cursor: pointer; }
     .game-create__btn--start-game {
       margin-bottom: 10px; }
     .game-create__btn:focus, .game-create__btn:hover {
@@ -145,7 +146,8 @@ img {
     margin-bottom: 5px; }
   .navigation__label {
     margin-left: 50px;
-    position: relative; }
+    position: relative;
+    cursor: pointer; }
     .navigation__label::before {
       content: "";
       width: 14px;
@@ -411,3 +413,41 @@ img {
       background-color: #00f70c;
       color: #000;
       font-weight: 700; }
+
+.modal {
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  position: relative; }
+  .modal__btn {
+    outline: none;
+    display: block;
+    background-color: black;
+    border: 1px solid #00f70c;
+    color: #00f70c;
+    font-size: 11px;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    transition: all .3s;
+    cursor: pointer; }
+    .modal__btn:focus, .modal__btn:hover {
+      background-color: #00f70c;
+      color: #000;
+      font-weight: 700; }
+  .modal__wrap {
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translateY(-50%) translateX(-50%);
+            transform: translateY(-50%) translateX(-50%);
+    border: 1px solid #00f70c;
+    padding: 20px; }
+  .modal__message {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0 0 15px; }

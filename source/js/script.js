@@ -260,10 +260,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 /* harmony import */ var _fight__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
 /**
  * Created by Murat on 08.06.2018.
  */
+
 
 
 
@@ -350,7 +352,7 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
   goForward () {
     console.log('this.gameData', this.gameData);
-    Object(_backend__WEBPACK_IMPORTED_MODULE_3__["moveHero"])(
+    Object(_backend__WEBPACK_IMPORTED_MODULE_4__["moveHero"])(
       (res) => {
         console.log('onSuccess', res);
         new Room(res);
@@ -363,6 +365,10 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
   fight () {
     new _fight__WEBPACK_IMPORTED_MODULE_2__["default"]();
   }
+
+  run () {
+    new _modal__WEBPACK_IMPORTED_MODULE_3__["default"]();
+  }
   clickNavigationHandler(evt) {
     switch (evt.target.value) {
       case `left` : console.log(`Пойти на лево`);
@@ -371,9 +377,11 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
         console.log(`Идти прямо`);
         this.goForward();
         break;
-      case `run` : console.log(`Бежать без оглядки`);
+      case `run` :
+        console.log(`Бежать без оглядки`);
+        this.run();
         break;
-      case `fight` : 
+      case `fight` :
         console.log(`Принять бой`);
         this.fight();
         break;
@@ -11039,6 +11047,52 @@ class Fight extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
       </div>`;
   }
 
+  clickGameStartBtnHandler() {
+  }
+  addEventListeners() {
+    // this.clickGameStartBtnHandler = this.clickGameStartBtnHandler.bind(this);
+    // this.startGameBtn.addEventListener('click', this.clickGameStartBtnHandler);
+  }
+}
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Modal; });
+/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/**
+ * Created by Murat on 10.06.2018.
+ */
+
+
+class Modal extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
+  constructor() {
+    super();
+    this.htmlString = this.getHtmlString();
+    this.element = this.createElement(this.htmlString);
+    // this.form = this.element.querySelector('.game-start');
+    this.addEventListeners();
+    this.appendToTree();
+    console.log('Modal');
+  }
+
+  getHtmlString() {
+    return `  
+      <div class="modal">
+        <div class="modal__wrap">
+          <p class="modal__message">Сообщение</p>
+          <button class="modal__btn">Ок</button>
+        </div>
+      </div>`;
+  }
+
+  appendToTree(container = document.body) {
+    container.appendChild(this.element);
+  }
   clickGameStartBtnHandler() {
   }
   addEventListeners() {

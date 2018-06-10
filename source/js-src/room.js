@@ -4,6 +4,7 @@
 import Render from './render';
 import Inventory from './inventory';
 import Fight from './fight';
+import Modal from './modal';
 import { moveHero } from './backend';
 
 export default class Room extends Render {
@@ -100,6 +101,10 @@ export default class Room extends Render {
   fight () {
     new Fight();
   }
+
+  run () {
+    new Modal();
+  }
   clickNavigationHandler(evt) {
     switch (evt.target.value) {
       case `left` : console.log(`Пойти на лево`);
@@ -108,9 +113,11 @@ export default class Room extends Render {
         console.log(`Идти прямо`);
         this.goForward();
         break;
-      case `run` : console.log(`Бежать без оглядки`);
+      case `run` :
+        console.log(`Бежать без оглядки`);
+        this.run();
         break;
-      case `fight` : 
+      case `fight` :
         console.log(`Принять бой`);
         this.fight();
         break;
