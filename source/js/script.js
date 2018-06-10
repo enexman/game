@@ -106,7 +106,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _game_start__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 /**
  * Created by Murat on 07.06.2018.
  */
@@ -199,7 +199,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GameStart; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /**
  * Created by Murat on 07.06.2018.
  */
@@ -258,11 +258,13 @@ class GameStart extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Room; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+/* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _fight__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 /**
  * Created by Murat on 08.06.2018.
  */
+
 
 
 
@@ -333,7 +335,7 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
               <li class="hero__weapon hero__weapon--feet">Ноги: <span>${this.gameData.weapons.head}</span></li>
             </ul>
             <a href="#" class="hero__link">
-              <img src="img/hero.jpg" alt="hero image" class="hero__image">
+              <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
             </a>
           </div>
           <ul class="hero__impacts">
@@ -348,7 +350,7 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
   goForward () {
     console.log('this.gameData', this.gameData);
-    Object(_backend__WEBPACK_IMPORTED_MODULE_2__["moveHero"])(
+    Object(_backend__WEBPACK_IMPORTED_MODULE_3__["moveHero"])(
       (res) => {
         console.log('onSuccess', res);
         new Room(res);
@@ -356,6 +358,10 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
       (res) => console.log('onError', res),
       this.gameData
     );
+  }
+
+  fight () {
+    new _fight__WEBPACK_IMPORTED_MODULE_2__["default"]();
   }
   clickNavigationHandler(evt) {
     switch (evt.target.value) {
@@ -367,7 +373,9 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
         break;
       case `run` : console.log(`Бежать без оглядки`);
         break;
-      case `fight` : console.log(`Принять бой`);
+      case `fight` : 
+        console.log(`Принять бой`);
+        this.fight();
         break;
       case `right` : console.log(`Пойти на право`);
         break;
@@ -394,11 +402,96 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Inventory; });
+/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/**
+ * Created by Murat on 10.06.2018.
+ */
+
+
+
+
+class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
+  constructor(gameData) {
+    super();
+    this.gameData = gameData;
+    this.htmlString = this.getHtmlString();
+    this.element = this.createElement(this.htmlString);
+    this.closeInventory = this.element.querySelector('.inventory__close');
+    this.addEventListeners();
+    this.appendToTree();
+    console.log('Inventory');
+  }
+
+  getHtmlString() {
+    return `  
+      <div class="inventory">
+        <button class="inventory__close">X</button>
+        <h2 class="inventory__title">Inventory</h2>
+        <div class="inventory__left">
+          <p class="inventory__description">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Ab accusantium consequatur, dicta doloremque, explicabo fuga in itaque
+            molestiae nobis quas quasi, quia quibusdam rem sequi similique sint vel.
+            Alias consectetur corporis cupiditate eum excepturi expedita, fuga
+            ipsum iste, nam porro, ut voluptatibus? Assumenda aut eius nemo nisi
+            quod sequi vel.
+          </p>
+          <div class="inventory__buttons">
+            <button class="inventory__btn">Drop</button>
+            <button class="inventory__btn">Take</button>
+          </div>
+        </div>
+        <div class="inventory__right">
+          <ul class="inventory__list">
+            <li class="inventory__item">inventory-1</li>
+            <li class="inventory__item">inventory-2</li>
+            <li class="inventory__item">inventory-3</li>
+            <li class="inventory__item">inventory-4</li>
+            <li class="inventory__item">inventory-5</li>
+            <li class="inventory__item">inventory-6</li>
+            <li class="inventory__item">inventory-7</li>
+            <li class="inventory__item">inventory-8</li>
+            <li class="inventory__item">inventory-9</li>
+            <li class="inventory__item">inventory-10</li>
+          </ul>
+        </div>
+        <div class="inventory__information">
+          max elements: 10
+        </div>
+      </div>`;
+  }
+
+  clickCloseInventoryHandler() {
+    Object(_backend__WEBPACK_IMPORTED_MODULE_2__["loadHero"])(
+      (res) => {
+        console.log('onSuccess', res);
+        new _room__WEBPACK_IMPORTED_MODULE_1__["default"](res);
+      },
+      (res) => console.log('onError', res),
+      this.gameData.uid
+    );
+  }
+  addEventListeners() {
+    this.clickCloseInventoryHandler = this.clickCloseInventoryHandler.bind(this);
+    this.closeInventory.addEventListener('click', this.clickCloseInventoryHandler);
+  }
+}
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createHero", function() { return createHero; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadHero", function() { return loadHero; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "moveHero", function() { return moveHero; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateHero", function() { return updateHero; });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * Created by Murat on 07.06.2018.
@@ -485,7 +578,7 @@ function updateHero (onSuccess, onError, data) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10856,86 +10949,101 @@ return jQuery;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Inventory; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Fight; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 /**
  * Created by Murat on 10.06.2018.
  */
 
 
-
-
-class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor(gameData) {
+class Fight extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
+  constructor() {
     super();
-    this.gameData = gameData;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
-    this.closeInventory = this.element.querySelector('.inventory__close');
-    this.addEventListeners();
+    // this.form = this.element.querySelector('.game-start');
     this.appendToTree();
-    console.log('Inventory');
+    console.log('Fight');
   }
 
   getHtmlString() {
     return `  
-      <div class="inventory">
-        <button class="inventory__close">X</button>
-        <h2 class="inventory__title">Inventory</h2>
-        <div class="inventory__left">
-          <p class="inventory__description">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Ab accusantium consequatur, dicta doloremque, explicabo fuga in itaque
-            molestiae nobis quas quasi, quia quibusdam rem sequi similique sint vel.
-            Alias consectetur corporis cupiditate eum excepturi expedita, fuga
-            ipsum iste, nam porro, ut voluptatibus? Assumenda aut eius nemo nisi
-            quod sequi vel.
-          </p>
-          <div class="inventory__buttons">
-            <button class="inventory__btn">Drop</button>
-            <button class="inventory__btn">Take</button>
+      <div class="fight">
+        <div class="fight__monster  monster">
+          <a href="#" class="monster__link">
+            <img src="http://placehold.it/150x100" alt="monster image" class="monster__image">
+            <div class="monster__description">
+              <p class="monster__text">
+                <span>Описание: </span>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Alias aliquid dolorum error exercitationem facilis iure odit
+                Alias aliquid dolorum error exercitationem facilis iure odit
+              </p>
+            </div>
+          </a>
+          <div class="monster__wrap">
+            <h2 class="monster__name">Dragon <span>10 level</span></h2>
+            <p class="monster__text">
+              <span>Непотребство: </span>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet animi
+              commodi corporis id provident rem saepe sed suscipit tempore voluptas.
+              Alias aliquid dolorum error exercitationem facilis iure odit
+            </p>
           </div>
         </div>
-        <div class="inventory__right">
-          <ul class="inventory__list">
-            <li class="inventory__item">inventory-1</li>
-            <li class="inventory__item">inventory-2</li>
-            <li class="inventory__item">inventory-3</li>
-            <li class="inventory__item">inventory-4</li>
-            <li class="inventory__item">inventory-5</li>
-            <li class="inventory__item">inventory-6</li>
-            <li class="inventory__item">inventory-7</li>
-            <li class="inventory__item">inventory-8</li>
-            <li class="inventory__item">inventory-9</li>
-            <li class="inventory__item">inventory-10</li>
-          </ul>
+        <div class="fight__battle  battle">
+          <p class="battle__message">Success</p>
+          <div class="battle__wrap">
+            <p class="battle__warrior">Hero</p>
+            <div class="battle__progress"></div>
+            <p class="battle__warrior">Dragon</p>
+          </div>
+          <button class="battle__attack">Attack</button>
         </div>
-        <div class="inventory__information">
-          max elements: 10
+        <div class="fight__hero  hero">
+          <div class="hero__wrap">
+            <p class="hero__race">Race: <span>Human</span></p>
+            <p class="hero__class">Class: <span>no class</span></p>
+          </div>
+          <div class="hero__wrap">
+            <ul class="hero__skills">
+              <li class="hero__skill">Name: <span>Hero</span></li>
+              <li class="hero__skill">Level: <span>1</span></li>
+              <li class="hero__skill">Strength: <span>1</span></li>
+              <li class="hero__skill">Agility: <span>1</span></li>
+              <li class="hero__skill">Luck: <span>1</span></li>
+            </ul>
+            <ul class="hero__inventory">
+              <li class="hero__weapon hero__weapon--head">Шлем: <span>5</span></li>
+              <li class="hero__weapon hero__weapon--body">Доспехи: <span>5</span></li>
+              <li class="hero__weapon hero__weapon--hand">Мечь смертоносный: <span>5</span></li>
+              <li class="hero__weapon hero__weapon--hand">Щит: <span>5</span></li>
+              <li class="hero__weapon hero__weapon--feet">Сапожки: <span>5</span></li>
+            </ul>
+            <a href="#" class="hero__link">
+              <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
+            </a>
+          </div>
+          <ul class="hero__impacts">
+            <li class="hero__negative" title="Негативное"></li>
+            <li class="hero__positive" title="Позитивное"></li>
+            <li class="hero__positive" title="Позитивное"></li>
+            <li class="hero__positive" title="Позитивное"></li>
+          </ul>
         </div>
       </div>`;
   }
 
-  clickCloseInventoryHandler() {
-    Object(_backend__WEBPACK_IMPORTED_MODULE_2__["loadHero"])(
-      (res) => {
-        console.log('onSuccess', res);
-        new _room__WEBPACK_IMPORTED_MODULE_1__["default"](res);
-      },
-      (res) => console.log('onError', res),
-      this.gameData.uid
-    );
+  clickGameStartBtnHandler() {
   }
   addEventListeners() {
-    this.clickCloseInventoryHandler = this.clickCloseInventoryHandler.bind(this);
-    this.closeInventory.addEventListener('click', this.clickCloseInventoryHandler);
+    // this.clickGameStartBtnHandler = this.clickGameStartBtnHandler.bind(this);
+    // this.startGameBtn.addEventListener('click', this.clickGameStartBtnHandler);
   }
 }
 

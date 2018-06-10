@@ -3,6 +3,7 @@
  */
 import Render from './render';
 import Inventory from './inventory';
+import Fight from './fight';
 import { moveHero } from './backend';
 
 export default class Room extends Render {
@@ -71,7 +72,7 @@ export default class Room extends Render {
               <li class="hero__weapon hero__weapon--feet">Ноги: <span>${this.gameData.weapons.head}</span></li>
             </ul>
             <a href="#" class="hero__link">
-              <img src="img/hero.jpg" alt="hero image" class="hero__image">
+              <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
             </a>
           </div>
           <ul class="hero__impacts">
@@ -95,6 +96,10 @@ export default class Room extends Render {
       this.gameData
     );
   }
+
+  fight () {
+    new Fight();
+  }
   clickNavigationHandler(evt) {
     switch (evt.target.value) {
       case `left` : console.log(`Пойти на лево`);
@@ -105,7 +110,9 @@ export default class Room extends Render {
         break;
       case `run` : console.log(`Бежать без оглядки`);
         break;
-      case `fight` : console.log(`Принять бой`);
+      case `fight` : 
+        console.log(`Принять бой`);
+        this.fight();
         break;
       case `right` : console.log(`Пойти на право`);
         break;

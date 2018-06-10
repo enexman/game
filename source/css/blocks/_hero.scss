@@ -22,7 +22,7 @@
   &__skill {
     list-style: none;
     padding-left: 0;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 
     &:last-child {
       margin-bottom: 0;
@@ -34,7 +34,7 @@
   }
 
   &__impacts {
-    margin: 10px 0 5px;
+    margin: 10px 0 6px;
     padding: 0;
     list-style: none;
     display: flex;
@@ -62,7 +62,7 @@
     margin-left: 100px;
     display: block;
     width: 150px;
-    height: 128px;
+    height: 100px;
   }
 
   &__inventory {
@@ -73,7 +73,7 @@
   }
 
   &__weapon {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 
     &:last-child {
       margin-bottom: 0;

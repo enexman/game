@@ -15,7 +15,7 @@ body {
   padding: 0;
   font-family: Gilroy, sans-serif;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   color: #00f70c;
   background-color: black; }
 
@@ -97,6 +97,7 @@ img {
 
 .room {
   width: 768px;
+  height: 400px;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -134,7 +135,8 @@ img {
   min-height: 87px;
   display: flex;
   justify-content: space-around;
-  flex-direction: column; }
+  flex-direction: column;
+  margin: 21px 0; }
   .navigation__group {
     margin-bottom: 10px; }
   .navigation__group:first-child {
@@ -187,13 +189,13 @@ img {
   .hero__skill {
     list-style: none;
     padding-left: 0;
-    margin-bottom: 8px; }
+    margin-bottom: 4px; }
     .hero__skill:last-child {
       margin-bottom: 0; }
     .hero__skill span {
       font-weight: 700; }
   .hero__impacts {
-    margin: 10px 0 5px;
+    margin: 10px 0 6px;
     padding: 0;
     list-style: none;
     display: flex; }
@@ -213,29 +215,33 @@ img {
     margin-left: 100px;
     display: block;
     width: 150px;
-    height: 128px; }
+    height: 100px; }
   .hero__inventory {
     margin: 0;
     padding: 0;
     margin-left: auto;
     list-style: none; }
   .hero__weapon {
-    margin-bottom: 8px; }
+    margin-bottom: 4px; }
     .hero__weapon:last-child {
       margin-bottom: 0; }
     .hero__weapon span {
       font-weight: 700; }
 
 .inventory {
+  box-sizing: border-box;
   display: flex;
   width: 768px;
+  height: 400px;
   position: absolute;
   left: 50%;
   top: 50%;
   -webkit-transform: translateY(-50%) translateX(-50%);
           transform: translateY(-50%) translateX(-50%);
   border-top: 1px solid #00f70c;
-  flex-wrap: wrap; }
+  border-bottom: 1px solid #00f70c;
+  flex-wrap: wrap;
+  font-size: 16px; }
   .inventory__left {
     width: 344px;
     padding: 10px 20px;
@@ -252,14 +258,19 @@ img {
     min-height: 270px; }
   .inventory__title {
     font-weight: 700;
-    font-size: 26px;
+    font-size: 21px;
     margin: 10px 0;
     width: 100%;
     text-align: center; }
   .inventory__description {
     margin: 0;
     line-height: 1.5;
-    text-align: justify; }
+    text-align: justify;
+    font-size: 14px; }
+    .inventory__description:first-letter {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.5; }
   .inventory__list {
     margin: 0;
     padding-left: 20px; }
@@ -274,7 +285,7 @@ img {
       cursor: pointer;
       font-weight: 700; }
   .inventory__information {
-    margin: 10px 0 0;
+    margin: 22px 0 10px;
     width: 100%;
     text-align: center; }
   .inventory__buttons {
@@ -286,7 +297,7 @@ img {
     background-color: black;
     border: 1px solid #00f70c;
     color: #00f70c;
-    font-size: 13px;
+    font-size: 11px;
     padding: 5px 0;
     width: 130px;
     text-transform: uppercase;
@@ -314,3 +325,89 @@ img {
       color: #000;
       font-weight: 700;
       cursor: pointer; }
+
+.fight {
+  width: 768px;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateY(-50%) translateX(-50%);
+          transform: translateY(-50%) translateX(-50%); }
+
+.monster {
+  margin: 5px 0;
+  padding: 10px 20px 5px;
+  border-top: 1px solid #00f70c;
+  display: flex; }
+  .monster__link {
+    position: relative;
+    display: block;
+    width: 150px;
+    height: 100px;
+    flex-shrink: 0; }
+    .monster__link:hover .monster__description {
+      display: block; }
+  .monster__wrap {
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px; }
+  .monster__description {
+    display: none;
+    position: absolute;
+    color: #00f70c;
+    background-color: black;
+    text-align: justify;
+    width: 500px;
+    top: 68px;
+    left: 114px;
+    border: 1px solid #00f70c;
+    padding: 5px 20px; }
+  .monster__text {
+    margin: 5px 0;
+    font-size: 14px;
+    text-align: justify; }
+    .monster__text span {
+      font-weight: 700; }
+  .monster__name {
+    margin: 0; }
+
+.battle {
+  min-height: 71px;
+  padding: 0 20px;
+  margin: 20px 0 5px; }
+  .battle__wrap {
+    display: flex;
+    justify-content: space-around;
+    align-items: center; }
+  .battle__message {
+    margin: 0;
+    text-align: center;
+    font-size: 16px; }
+  .battle__warrior {
+    margin: 0;
+    width: 100px;
+    text-align: center;
+    font-size: 16px; }
+  .battle__progress {
+    width: 400px;
+    height: 20px;
+    background: linear-gradient(90deg, #00f70c 70%, #f71f00 30%);
+    border: 1px solid #00f70c;
+    margin: 6px 0 9px; }
+  .battle__attack {
+    margin: 0 auto;
+    display: block;
+    outline: none;
+    background-color: black;
+    border: 1px solid #00f70c;
+    color: #00f70c;
+    font-size: 11px;
+    padding: 2px 20px;
+    text-transform: uppercase;
+    transition: all .3s;
+    cursor: pointer; }
+    .battle__attack:focus, .battle__attack:hover {
+      background-color: #00f70c;
+      color: #000;
+      font-weight: 700; }

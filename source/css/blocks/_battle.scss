@@ -1,0 +1,55 @@
+.battle {
+  min-height: 71px;
+  padding: 0 20px;
+  margin: 20px 0 5px;
+
+  &__wrap {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  &__message {
+    margin: 0;
+    text-align: center;
+    font-size: $text-strong;
+  }
+
+  &__warrior {
+    margin: 0;
+    width: 100px;
+    text-align: center;
+    font-size: $text-strong;
+  }
+
+  &__progress {
+    width: 400px;
+    height: 20px;
+    //background-color: $green;
+    background: linear-gradient(90deg, $green 70%, $red 30%);
+    border: 1px solid $green;
+    margin: 6px 0 9px;
+  }
+
+  &__attack {
+    margin: 0 auto;
+    display: block;
+
+    outline: none;
+    background-color: $black;
+    border: 1px solid $green;
+    color: $green;
+    font-size: $text-small;
+    padding: 2px 20px;
+    text-transform: uppercase;
+    transition: all .3s;
+    cursor: pointer;
+
+    &:focus,
+    &:hover {
+      background-color: $green;
+      color: #000;
+      font-weight: 700;
+    }
+  }
+}

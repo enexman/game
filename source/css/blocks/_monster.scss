@@ -1,0 +1,50 @@
+.monster {
+  margin: 5px 0;
+  padding: 10px 20px 5px;
+  border-top: 1px solid $green;
+  display: flex;
+
+  &__link {
+    position: relative;
+    display: block;
+    width: 150px;
+    height: 100px;
+    flex-shrink: 0;
+
+    &:hover .monster__description {
+      display: block;
+    }
+  }
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+  }
+
+  &__description {
+    display: none;
+    position: absolute;
+    color: $green;
+    background-color: $black;
+    text-align: justify;
+    width: 500px;
+    top: 68px;
+    left: 114px;
+    border: 1px solid $green;
+    padding: 5px 20px;
+  }
+
+  &__text {
+    margin: 5px 0;
+    font-size: $text-normal;
+    text-align: justify;
+
+    span {
+      font-weight: 700;
+    }
+  }
+  &__name {
+    margin: 0;
+  }
+}
