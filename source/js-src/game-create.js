@@ -4,7 +4,7 @@
 import Render from './render';
 import GameStart from './game-start';
 import Room from './room';
-import { loadUser } from './backend';
+import { loadHero } from './backend';
 
 export default class GameCreate extends Render {
   constructor() {
@@ -29,7 +29,7 @@ export default class GameCreate extends Render {
     const uid = JSON.parse(localStorage.getItem(`uid`));
     console.log('uid', uid);
     if(uid) {
-      loadUser(
+      loadHero(
         (res) => {
           console.log('onSuccess', res);
           new Room(res);

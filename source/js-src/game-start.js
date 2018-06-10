@@ -3,7 +3,7 @@
  */
 import Render from './render';
 import Room from './room';
-import { createUser } from './backend';
+import { createHero } from './backend';
 
 export default class GameStart extends Render {
   constructor() {
@@ -32,7 +32,7 @@ export default class GameStart extends Render {
     evt.preventDefault();
     const uid = this.gameInput.value.toLowerCase() + Date.now();
     localStorage.setItem(`uid`, JSON.stringify(uid));
-    createUser(
+    createHero(
       (res) => {
         console.log('onSuccess', res);
         new Room(res);

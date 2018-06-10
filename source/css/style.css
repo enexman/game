@@ -63,7 +63,8 @@ img {
     .game-start button:focus, .game-start button:hover {
       background-color: #00f70c;
       color: #000;
-      font-weight: 700; }
+      font-weight: 700;
+      cursor: pointer; }
 
 .game-create {
   font-weight: 700;
@@ -109,7 +110,7 @@ img {
     margin: 10px 0;
     padding: 5px 20px;
     font-weight: 400;
-    min-height: 80px;
+    min-height: 60px;
     text-align: justify; }
   .stat__level {
     margin-left: 20px;
@@ -172,11 +173,14 @@ img {
       display: block; }
 
 .hero {
-  margin: 10px 0;
+  margin: 5px 0;
   padding: 5px 20px;
   border-bottom: 1px solid #00f70c; }
   .hero__wrap {
-    display: flex; }
+    display: flex;
+    justify-content: space-around; }
+  .hero__race, .hero__class {
+    margin: 5px 0 10px; }
   .hero__skills {
     padding: 0;
     margin: 0; }
@@ -184,29 +188,32 @@ img {
     list-style: none;
     padding-left: 0;
     margin-bottom: 8px; }
+    .hero__skill:last-child {
+      margin-bottom: 0; }
     .hero__skill span {
       font-weight: 700; }
   .hero__impacts {
+    margin: 10px 0 5px;
     padding: 0;
     list-style: none;
     display: flex; }
     .hero__impacts li {
       margin-left: 10px; }
   .hero__negative {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     background: #f71f00; }
   .hero__positive {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     background: #00f70c; }
   .hero__link {
     margin-left: 100px;
     display: block;
     width: 150px;
-    height: 135px; }
+    height: 128px; }
   .hero__inventory {
     margin: 0;
     padding: 0;
@@ -214,5 +221,96 @@ img {
     list-style: none; }
   .hero__weapon {
     margin-bottom: 8px; }
+    .hero__weapon:last-child {
+      margin-bottom: 0; }
     .hero__weapon span {
       font-weight: 700; }
+
+.inventory {
+  display: flex;
+  width: 768px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateY(-50%) translateX(-50%);
+          transform: translateY(-50%) translateX(-50%);
+  border-top: 1px solid #00f70c;
+  flex-wrap: wrap; }
+  .inventory__left {
+    width: 344px;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 270px; }
+  .inventory__right {
+    width: 344px;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 270px; }
+  .inventory__title {
+    font-weight: 700;
+    font-size: 26px;
+    margin: 10px 0;
+    width: 100%;
+    text-align: center; }
+  .inventory__description {
+    margin: 0;
+    line-height: 1.5;
+    text-align: justify; }
+  .inventory__list {
+    margin: 0;
+    padding-left: 20px; }
+  .inventory__item {
+    padding-left: 15px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    transition: all .3s; }
+    .inventory__item:focus, .inventory__item:hover {
+      background-color: #00f70c;
+      color: #000;
+      cursor: pointer;
+      font-weight: 700; }
+  .inventory__information {
+    margin: 10px 0 0;
+    width: 100%;
+    text-align: center; }
+  .inventory__buttons {
+    display: flex;
+    margin: 10px 0 0;
+    justify-content: space-around; }
+  .inventory__btn {
+    outline: none;
+    background-color: black;
+    border: 1px solid #00f70c;
+    color: #00f70c;
+    font-size: 13px;
+    padding: 5px 0;
+    width: 130px;
+    text-transform: uppercase;
+    transition: all .3s; }
+    .inventory__btn:focus, .inventory__btn:hover {
+      background-color: #00f70c;
+      color: #000;
+      font-weight: 700;
+      cursor: pointer; }
+  .inventory__close {
+    outline: none;
+    background-color: black;
+    border: none;
+    color: #00f70c;
+    font-size: 13px;
+    width: 30px;
+    height: 30px;
+    text-transform: uppercase;
+    transition: all .3s;
+    position: absolute;
+    right: 35px;
+    top: 25px; }
+    .inventory__close:focus, .inventory__close:hover {
+      background-color: #00f70c;
+      color: #000;
+      font-weight: 700;
+      cursor: pointer; }

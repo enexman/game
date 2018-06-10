@@ -2,14 +2,17 @@
  * Created by Murat on 08.06.2018.
  */
 import Render from './render';
+import Inventory from './inventory';
+import { moveHero } from './backend';
 
-export default class Main extends Render {
+export default class Room extends Render {
   constructor(gameData) {
     super();
     this.gameData = gameData;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
     this.navigation = this.element.querySelector('.navigation');
+    this.linkInventory = this.element.querySelector('.hero__link');
     this.addEventListeners();
     this.appendToTree();
     console.log('Room');
@@ -49,6 +52,10 @@ export default class Main extends Render {
         </form>
         <div class="room__hero  hero">
           <div class="hero__wrap">
+            <p class="hero__race">Race: <span>${this.gameData.race}</span></p>
+            <p class="hero__class">Class: <span>${this.gameData.class}</span></p>
+          </div>
+          <div class="hero__wrap">
             <ul class="hero__skills">
               <li class="hero__skill">Name: <span>${this.gameData.name}</span></li>
               <li class="hero__skill">Level: <span>${this.gameData.level}</span></li>
@@ -77,11 +84,24 @@ export default class Main extends Render {
       </div>`;
   }
 
+  goForward () {
+    console.log('this.gameData', this.gameData);
+    moveHero(
+      (res) => {
+        console.log('onSuccess', res);
+        new Room(res);
+      },
+      (res) => console.log('onError', res),
+      this.gameData
+    );
+  }
   clickNavigationHandler(evt) {
     switch (evt.target.value) {
       case `left` : console.log(`Пойти на лево`);
         break;
-      case `forward` : console.log(`Идти прямо`);
+      case `forward` :
+        console.log(`Идти прямо`);
+        this.goForward();
         break;
       case `run` : console.log(`Бежать без оглядки`);
         break;
@@ -91,8 +111,16 @@ export default class Main extends Render {
         break;
     }
   }
+
+  clickLinkInventoryHandler(evt) {
+    evt.preventDefault();
+    new Inventory(this.gameData);
+  }
   addEventListeners() {
     this.clickNavigationHandler = this.clickNavigationHandler.bind(this);
     this.navigation.addEventListener('click', this.clickNavigationHandler);
+
+    this.clickLinkInventoryHandler = this.clickLinkInventoryHandler.bind(this);
+    this.linkInventory.addEventListener('click', this.clickLinkInventoryHandler);
   }
 }

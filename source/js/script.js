@@ -138,7 +138,7 @@ class GameCreate extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
     const uid = JSON.parse(localStorage.getItem(`uid`));
     console.log('uid', uid);
     if(uid) {
-      Object(_backend__WEBPACK_IMPORTED_MODULE_3__["loadUser"])(
+      Object(_backend__WEBPACK_IMPORTED_MODULE_3__["loadHero"])(
         (res) => {
           console.log('onSuccess', res);
           new _room__WEBPACK_IMPORTED_MODULE_2__["default"](res);
@@ -234,7 +234,7 @@ class GameStart extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
     evt.preventDefault();
     const uid = this.gameInput.value.toLowerCase() + Date.now();
     localStorage.setItem(`uid`, JSON.stringify(uid));
-    Object(_backend__WEBPACK_IMPORTED_MODULE_2__["createUser"])(
+    Object(_backend__WEBPACK_IMPORTED_MODULE_2__["createHero"])(
       (res) => {
         console.log('onSuccess', res);
         new _room__WEBPACK_IMPORTED_MODULE_1__["default"](res);
@@ -256,20 +256,25 @@ class GameStart extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Main; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Room; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 /**
  * Created by Murat on 08.06.2018.
  */
 
 
-class Main extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
+
+
+class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
   constructor(gameData) {
     super();
     this.gameData = gameData;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
     this.navigation = this.element.querySelector('.navigation');
+    this.linkInventory = this.element.querySelector('.hero__link');
     this.addEventListeners();
     this.appendToTree();
     console.log('Room');
@@ -309,6 +314,10 @@ class Main extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
         </form>
         <div class="room__hero  hero">
           <div class="hero__wrap">
+            <p class="hero__race">Race: <span>${this.gameData.race}</span></p>
+            <p class="hero__class">Class: <span>${this.gameData.class}</span></p>
+          </div>
+          <div class="hero__wrap">
             <ul class="hero__skills">
               <li class="hero__skill">Name: <span>${this.gameData.name}</span></li>
               <li class="hero__skill">Level: <span>${this.gameData.level}</span></li>
@@ -337,11 +346,24 @@ class Main extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
       </div>`;
   }
 
+  goForward () {
+    console.log('this.gameData', this.gameData);
+    Object(_backend__WEBPACK_IMPORTED_MODULE_2__["moveHero"])(
+      (res) => {
+        console.log('onSuccess', res);
+        new Room(res);
+      },
+      (res) => console.log('onError', res),
+      this.gameData
+    );
+  }
   clickNavigationHandler(evt) {
     switch (evt.target.value) {
       case `left` : console.log(`Пойти на лево`);
         break;
-      case `forward` : console.log(`Идти прямо`);
+      case `forward` :
+        console.log(`Идти прямо`);
+        this.goForward();
         break;
       case `run` : console.log(`Бежать без оглядки`);
         break;
@@ -351,9 +373,17 @@ class Main extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
         break;
     }
   }
+
+  clickLinkInventoryHandler(evt) {
+    evt.preventDefault();
+    new _inventory__WEBPACK_IMPORTED_MODULE_1__["default"](this.gameData);
+  }
   addEventListeners() {
     this.clickNavigationHandler = this.clickNavigationHandler.bind(this);
     this.navigation.addEventListener('click', this.clickNavigationHandler);
+
+    this.clickLinkInventoryHandler = this.clickLinkInventoryHandler.bind(this);
+    this.linkInventory.addEventListener('click', this.clickLinkInventoryHandler);
   }
 }
 
@@ -364,9 +394,10 @@ class Main extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createUser", function() { return createUser; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadUser", function() { return loadUser; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateUser", function() { return updateUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createHero", function() { return createHero; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadHero", function() { return loadHero; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "moveHero", function() { return moveHero; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateHero", function() { return updateHero; });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /**
@@ -377,11 +408,11 @@ __webpack_require__.r(__webpack_exports__);
 // const API = 'https://quiet-island-38343.herokuapp.com/api/';
 const API = 'http://127.0.0.1:5000/api/';
 
-function createUser (onSuccess, onError, uid) {
+function createHero (onSuccess, onError, uid) {
   const settings = {
     async: true,
     crossDomain: true,
-    url: `${API}uid/create`,
+    url: `${API}create`,
     method: 'POST',
     data: {
       uid
@@ -396,11 +427,11 @@ function createUser (onSuccess, onError, uid) {
     .fail(error => onError(error.status))
 }
 
-function loadUser (onSuccess, onError, uid) {
+function loadHero (onSuccess, onError, uid) {
   const settings = {
     async: true,
     crossDomain: true,
-    url: `${API}uid/load`,
+    url: `${API}load`,
     method: 'POST',
     data: {
       uid
@@ -415,11 +446,31 @@ function loadUser (onSuccess, onError, uid) {
     .fail(error => onError(error.status))
 }
 
-function updateUser (onSuccess, onError, data) {
+function moveHero (onSuccess, onError, data) {
+  const jsonData = JSON.stringify(data);
   const settings = {
     async: true,
     crossDomain: true,
-    url: `${API}uid/update`,
+    url: `${API}move`,
+    method: 'POST',
+    data: {
+      jsonData
+    },
+    headers: {
+      accept: 'application/json'
+    }
+  };
+
+  jquery__WEBPACK_IMPORTED_MODULE_0___default.a.ajax(settings)
+    .done(response => onSuccess(response))
+    .fail(error => onError(error.status))
+}
+
+function updateHero (onSuccess, onError, data) {
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: `${API}update`,
     method: 'POST',
     data,
     headers: {
@@ -10802,6 +10853,91 @@ if ( !noGlobal ) {
 
 return jQuery;
 } );
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Inventory; });
+/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+/**
+ * Created by Murat on 10.06.2018.
+ */
+
+
+
+
+class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
+  constructor(gameData) {
+    super();
+    this.gameData = gameData;
+    this.htmlString = this.getHtmlString();
+    this.element = this.createElement(this.htmlString);
+    this.closeInventory = this.element.querySelector('.inventory__close');
+    this.addEventListeners();
+    this.appendToTree();
+    console.log('Inventory');
+  }
+
+  getHtmlString() {
+    return `  
+      <div class="inventory">
+        <button class="inventory__close">X</button>
+        <h2 class="inventory__title">Inventory</h2>
+        <div class="inventory__left">
+          <p class="inventory__description">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Ab accusantium consequatur, dicta doloremque, explicabo fuga in itaque
+            molestiae nobis quas quasi, quia quibusdam rem sequi similique sint vel.
+            Alias consectetur corporis cupiditate eum excepturi expedita, fuga
+            ipsum iste, nam porro, ut voluptatibus? Assumenda aut eius nemo nisi
+            quod sequi vel.
+          </p>
+          <div class="inventory__buttons">
+            <button class="inventory__btn">Drop</button>
+            <button class="inventory__btn">Take</button>
+          </div>
+        </div>
+        <div class="inventory__right">
+          <ul class="inventory__list">
+            <li class="inventory__item">inventory-1</li>
+            <li class="inventory__item">inventory-2</li>
+            <li class="inventory__item">inventory-3</li>
+            <li class="inventory__item">inventory-4</li>
+            <li class="inventory__item">inventory-5</li>
+            <li class="inventory__item">inventory-6</li>
+            <li class="inventory__item">inventory-7</li>
+            <li class="inventory__item">inventory-8</li>
+            <li class="inventory__item">inventory-9</li>
+            <li class="inventory__item">inventory-10</li>
+          </ul>
+        </div>
+        <div class="inventory__information">
+          max elements: 10
+        </div>
+      </div>`;
+  }
+
+  clickCloseInventoryHandler() {
+    Object(_backend__WEBPACK_IMPORTED_MODULE_2__["loadHero"])(
+      (res) => {
+        console.log('onSuccess', res);
+        new _room__WEBPACK_IMPORTED_MODULE_1__["default"](res);
+      },
+      (res) => console.log('onError', res),
+      this.gameData.uid
+    );
+  }
+  addEventListeners() {
+    this.clickCloseInventoryHandler = this.clickCloseInventoryHandler.bind(this);
+    this.closeInventory.addEventListener('click', this.clickCloseInventoryHandler);
+  }
+}
 
 
 /***/ })

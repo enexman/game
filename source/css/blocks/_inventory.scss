@@ -1,0 +1,117 @@
+.inventory {
+  display: flex;
+  width: 768px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  border-top: 1px solid $green;
+  flex-wrap: wrap;
+
+  &__left {
+    width: 344px;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 270px;
+  }
+
+  &__right {
+    width: 344px;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 270px;
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 26px;
+    margin: 10px 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  &__description {
+    margin: 0;
+    line-height: 1.5;
+    text-align: justify;
+  }
+
+  &__list {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  &__item {
+    padding-left: 15px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    transition: all .3s;
+
+    &:focus,
+    &:hover {
+      background-color: $green;
+      color: #000;
+      cursor: pointer;
+      font-weight: 700;
+    }
+  }
+
+  &__information {
+    margin: 10px 0 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  &__buttons {
+    display: flex;
+    margin: 10px 0 0;
+    justify-content: space-around;
+  }
+
+  &__btn {
+    outline: none;
+    background-color: $black;
+    border: 1px solid $green;
+    color: $green;
+    font-size: 13px;
+    padding: 5px 0;
+    width: 130px;
+    text-transform: uppercase;
+    transition: all .3s;
+
+    &:focus,
+    &:hover {
+      background-color: $green;
+      color: #000;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  }
+
+  &__close {
+    outline: none;
+    background-color: $black;
+    border: none;
+    color: $green;
+    font-size: 13px;
+    width: 30px;
+    height: 30px;
+    text-transform: uppercase;
+    transition: all .3s;
+    position: absolute;
+    right: 35px;
+    top: 25px;
+
+    &:focus,
+    &:hover {
+      background-color: $green;
+      color: #000;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,10 +1,16 @@
 .hero {
-  margin: 10px 0;
+  margin: 5px 0;
   padding: 5px 20px;
   border-bottom: 1px solid $green;
 
   &__wrap {
     display: flex;
+    justify-content: space-around;
+  }
+
+  &__race,
+  &__class {
+    margin: 5px 0 10px;
   }
 
   &__skills {
@@ -18,12 +24,17 @@
     padding-left: 0;
     margin-bottom: 8px;
 
+    &:last-child {
+      margin-bottom: 0;
+    }
+
     span {
       font-weight: 700;
     }
   }
 
   &__impacts {
+    margin: 10px 0 5px;
     padding: 0;
     list-style: none;
     display: flex;
@@ -51,7 +62,7 @@
     margin-left: 100px;
     display: block;
     width: 150px;
-    height: 135px;
+    height: 128px;
   }
 
   &__inventory {
@@ -63,6 +74,10 @@
 
   &__weapon {
     margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
 
     span {
       font-weight: 700;
