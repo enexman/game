@@ -22,9 +22,9 @@ export default class GameStart extends Render {
   getHtmlString() {
     return `  
       <form class="game-start" autocomplete="off">
-        <label for="name">Имя героя:</label>
+        <label for="name">Name of hero:</label>
         <input class="game-start__input" id="name" type="text">
-        <button class="game-start__submit" type="submit">Пуск</button>
+        <button class="game-start__submit" type="submit">Start</button>
       </form>`;
   }
 

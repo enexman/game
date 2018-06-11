@@ -18,8 +18,8 @@ export default class Modal extends Render {
     return `  
       <div class="modal">
         <div class="modal__wrap">
-          <p class="modal__message">Сообщение</p>
-          <button class="modal__btn">Ок</button>
+          <p class="modal__message">Message</p>
+          <button class="modal__btn">Ok</button>
         </div>
       </div>`;
   }

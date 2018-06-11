@@ -1,7 +1,7 @@
 .battle {
   min-height: 71px;
   padding: 0 20px;
-  margin: 20px 0 5px;
+  margin: 10px 0 5px;
 
   &__wrap {
     display: flex;
@@ -24,7 +24,7 @@
 
   &__progress {
     width: 400px;
-    height: 20px;
+    height: 25px;
     //background-color: $green;
     background: linear-gradient(90deg, $green 70%, $red 30%);
     border: 1px solid $green;
@@ -40,10 +40,11 @@
     border: 1px solid $green;
     color: $green;
     font-size: $text-small;
-    padding: 2px 20px;
+    padding: 5px 20px;
     text-transform: uppercase;
     transition: all .3s;
     cursor: pointer;
+    width: 150px;
 
     &:focus,
     &:hover {

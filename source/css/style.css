@@ -30,14 +30,13 @@ img {
 
 .game-start {
   font-weight: 700;
-  width: 250px;
   position: absolute;
   left: 50%;
   top: 50%;
   -webkit-transform: translateY(-50%) translateX(-50%);
           transform: translateY(-50%) translateX(-50%);
   border: 1px solid #00f70c;
-  padding: 20px;
+  padding: 23px 20px;
   text-transform: uppercase; }
   .game-start label {
     display: block;
@@ -45,21 +44,23 @@ img {
   .game-start input {
     outline: none;
     padding: 5px 10px;
-    width: 165px;
+    width: 155px;
     border: 1px solid #00f70c;
     background-color: black;
     color: #00f70c;
     text-transform: uppercase;
-    transition: all .2s; }
+    transition: all .2s;
+    font-size: 11px; }
   .game-start button {
     outline: none;
     background-color: black;
     border: 1px solid #00f70c;
     color: #00f70c;
-    font-size: 13px;
+    font-size: 11px;
     padding: 5px 10px;
     text-transform: uppercase;
-    transition: all .3s; }
+    transition: all .3s;
+    width: 70px; }
     .game-start button:focus, .game-start button:hover {
       background-color: #00f70c;
       color: #000;
@@ -70,7 +71,6 @@ img {
   font-weight: 700;
   display: flex;
   flex-direction: column;
-  width: 250px;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -84,11 +84,12 @@ img {
     background-color: black;
     border: 1px solid #00f70c;
     color: #00f70c;
-    font-size: 13px;
+    font-size: 11px;
     padding: 5px 10px;
     text-transform: uppercase;
     transition: all .3s;
-    cursor: pointer; }
+    cursor: pointer;
+    width: 250px; }
     .game-create__btn--start-game {
       margin-bottom: 10px; }
     .game-create__btn:focus, .game-create__btn:hover {
@@ -377,7 +378,7 @@ img {
 .battle {
   min-height: 71px;
   padding: 0 20px;
-  margin: 20px 0 5px; }
+  margin: 10px 0 5px; }
   .battle__wrap {
     display: flex;
     justify-content: space-around;
@@ -393,7 +394,7 @@ img {
     font-size: 16px; }
   .battle__progress {
     width: 400px;
-    height: 20px;
+    height: 25px;
     background: linear-gradient(90deg, #00f70c 70%, #f71f00 30%);
     border: 1px solid #00f70c;
     margin: 6px 0 9px; }
@@ -405,10 +406,11 @@ img {
     border: 1px solid #00f70c;
     color: #00f70c;
     font-size: 11px;
-    padding: 2px 20px;
+    padding: 5px 20px;
     text-transform: uppercase;
     transition: all .3s;
-    cursor: pointer; }
+    cursor: pointer;
+    width: 150px; }
     .battle__attack:focus, .battle__attack:hover {
       background-color: #00f70c;
       color: #000;
@@ -445,7 +447,7 @@ img {
     -webkit-transform: translateY(-50%) translateX(-50%);
             transform: translateY(-50%) translateX(-50%);
     border: 1px solid #00f70c;
-    padding: 20px; }
+    padding: 21px 20px; }
   .modal__message {
     text-align: center;
     font-size: 14px;

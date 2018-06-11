@@ -21,8 +21,8 @@ export default class GameCreate extends Render {
   getHtmlString() {
     return `  
       <div class="game-create">
-        <button class="game-create__btn  game-create__btn--start-game">Войти в игру</button>
-        <button class="game-create__btn  game-create__btn--new-game">Новая игра</button>
+        <button class="game-create__btn  game-create__btn--start-game">Enter the game</button>
+        <button class="game-create__btn  game-create__btn--new-game">New game</button>
       </div>`;
   }
   clickStartGameBtnHandler() {

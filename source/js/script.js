@@ -130,8 +130,8 @@ class GameCreate extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
   getHtmlString() {
     return `  
       <div class="game-create">
-        <button class="game-create__btn  game-create__btn--start-game">Войти в игру</button>
-        <button class="game-create__btn  game-create__btn--new-game">Новая игра</button>
+        <button class="game-create__btn  game-create__btn--start-game">Enter the game</button>
+        <button class="game-create__btn  game-create__btn--new-game">New game</button>
       </div>`;
   }
   clickStartGameBtnHandler() {
@@ -224,9 +224,9 @@ class GameStart extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
   getHtmlString() {
     return `  
       <form class="game-start" autocomplete="off">
-        <label for="name">Имя героя:</label>
+        <label for="name">Name of hero:</label>
         <input class="game-start__input" id="name" type="text">
-        <button class="game-start__submit" type="submit">Пуск</button>
+        <button class="game-start__submit" type="submit">Start</button>
       </form>`;
   }
 
@@ -288,15 +288,15 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
     const navigation = this.gameData.room.navigation.map((it) => {
       let text =``;
       switch (it) {
-        case `left` : text = `Пойти на лево`;
+        case `left` : text = `Go to the left`;
           break;
-        case `forward` : text = `Идти прямо`;
+        case `forward` : text = `Go forward`;
           break;
-        case `run` : text = `Бежать без оглядки`;
+        case `run` : text = `Run without looking back`;
           break;
-        case `fight` : text = `Принять бой`;
+        case `fight` : text = `Take the fight`;
           break;
-        case `right` : text = `Пойти на право`;
+        case `right` : text = `Go to the right`;
           break;
       }
       return `
@@ -330,21 +330,21 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
               <li class="hero__skill">Luck: <span>${this.gameData.luck}</span></li>
             </ul>
             <ul class="hero__inventory">
-              <li class="hero__weapon hero__weapon--head">Голова: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--body">Тело: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Правая рука: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Левая рука: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--feet">Ноги: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--head">Head: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.head}</span></li>
             </ul>
             <a href="#" class="hero__link">
               <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
             </a>
           </div>
           <ul class="hero__impacts">
-            <li class="hero__negative" title="Негативное"></li>
-            <li class="hero__positive" title="Позитивное"></li>
-            <li class="hero__positive" title="Позитивное"></li>
-            <li class="hero__positive" title="Позитивное"></li>
+            <li class="hero__negative" title="Negative"></li>
+            <li class="hero__positive" title="Positive"></li>
+            <li class="hero__positive" title="Positive"></li>
+            <li class="hero__positive" title="Positive"></li>
           </ul>
         </div>
       </div>`;
@@ -363,7 +363,7 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
   }
 
   fight () {
-    new _fight__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    new _fight__WEBPACK_IMPORTED_MODULE_2__["default"](this.gameData);
   }
 
   run () {
@@ -383,7 +383,7 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
         break;
       case `fight` :
         console.log(`Принять бой`);
-        this.fight();
+        this.fight(this.gameData);
         break;
       case `right` : console.log(`Пойти на право`);
         break;
@@ -10964,16 +10964,21 @@ return jQuery;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Fight; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 /**
  * Created by Murat on 10.06.2018.
  */
 
 
+
 class Fight extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor() {
+  constructor(gameData) {
     super();
+    this.gameData = gameData;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
+    this.linkInventory = this.element.querySelector('.hero__link');
+    this.addEventListeners();
     // this.form = this.element.querySelector('.game-start');
     this.appendToTree();
     console.log('Fight');
@@ -10987,7 +10992,7 @@ class Fight extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
             <img src="http://placehold.it/150x100" alt="monster image" class="monster__image">
             <div class="monster__description">
               <p class="monster__text">
-                <span>Описание: </span>
+                <span>Characteristic: </span>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Alias aliquid dolorum error exercitationem facilis iure odit
                 Alias aliquid dolorum error exercitationem facilis iure odit
@@ -10997,7 +11002,7 @@ class Fight extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
           <div class="monster__wrap">
             <h2 class="monster__name">Dragon <span>10 level</span></h2>
             <p class="monster__text">
-              <span>Непотребство: </span>
+              <span>Indecency: </span>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet animi
               commodi corporis id provident rem saepe sed suscipit tempore voluptas.
               Alias aliquid dolorum error exercitationem facilis iure odit
@@ -11013,45 +11018,47 @@ class Fight extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
           </div>
           <button class="battle__attack">Attack</button>
         </div>
-        <div class="fight__hero  hero">
+        <div class="room__hero  hero">
           <div class="hero__wrap">
-            <p class="hero__race">Race: <span>Human</span></p>
-            <p class="hero__class">Class: <span>no class</span></p>
+            <p class="hero__race">Race: <span>${this.gameData.race}</span></p>
+            <p class="hero__class">Class: <span>${this.gameData.class}</span></p>
           </div>
           <div class="hero__wrap">
             <ul class="hero__skills">
-              <li class="hero__skill">Name: <span>Hero</span></li>
-              <li class="hero__skill">Level: <span>1</span></li>
-              <li class="hero__skill">Strength: <span>1</span></li>
-              <li class="hero__skill">Agility: <span>1</span></li>
-              <li class="hero__skill">Luck: <span>1</span></li>
+              <li class="hero__skill">Name: <span>${this.gameData.name}</span></li>
+              <li class="hero__skill">Level: <span>${this.gameData.level}</span></li>
+              <li class="hero__skill">Strength: <span>${this.gameData.strength}</span></li>
+              <li class="hero__skill">Agility: <span>${this.gameData.agility}</span></li>
+              <li class="hero__skill">Luck: <span>${this.gameData.luck}</span></li>
             </ul>
             <ul class="hero__inventory">
-              <li class="hero__weapon hero__weapon--head">Шлем: <span>5</span></li>
-              <li class="hero__weapon hero__weapon--body">Доспехи: <span>5</span></li>
-              <li class="hero__weapon hero__weapon--hand">Мечь смертоносный: <span>5</span></li>
-              <li class="hero__weapon hero__weapon--hand">Щит: <span>5</span></li>
-              <li class="hero__weapon hero__weapon--feet">Сапожки: <span>5</span></li>
+              <li class="hero__weapon hero__weapon--head">Head: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.head}</span></li>
             </ul>
             <a href="#" class="hero__link">
               <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
             </a>
           </div>
           <ul class="hero__impacts">
-            <li class="hero__negative" title="Негативное"></li>
-            <li class="hero__positive" title="Позитивное"></li>
-            <li class="hero__positive" title="Позитивное"></li>
-            <li class="hero__positive" title="Позитивное"></li>
+            <li class="hero__negative" title="Negative"></li>
+            <li class="hero__positive" title="Positive"></li>
+            <li class="hero__positive" title="Positive"></li>
+            <li class="hero__positive" title="Positive"></li>
           </ul>
         </div>
       </div>`;
   }
 
-  clickGameStartBtnHandler() {
+  clickLinkInventoryHandler(evt) {
+    evt.preventDefault();
+    new _inventory__WEBPACK_IMPORTED_MODULE_1__["default"](this.gameData);
   }
   addEventListeners() {
-    // this.clickGameStartBtnHandler = this.clickGameStartBtnHandler.bind(this);
-    // this.startGameBtn.addEventListener('click', this.clickGameStartBtnHandler);
+    this.clickLinkInventoryHandler = this.clickLinkInventoryHandler.bind(this);
+    this.linkInventory.addEventListener('click', this.clickLinkInventoryHandler);
   }
 }
 
@@ -11084,8 +11091,8 @@ class Modal extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
     return `  
       <div class="modal">
         <div class="modal__wrap">
-          <p class="modal__message">Сообщение</p>
-          <button class="modal__btn">Ок</button>
+          <p class="modal__message">Message</p>
+          <button class="modal__btn">Ok</button>
         </div>
       </div>`;
   }

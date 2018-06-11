@@ -24,15 +24,15 @@ export default class Room extends Render {
     const navigation = this.gameData.room.navigation.map((it) => {
       let text =``;
       switch (it) {
-        case `left` : text = `Пойти на лево`;
+        case `left` : text = `Go to the left`;
           break;
-        case `forward` : text = `Идти прямо`;
+        case `forward` : text = `Go forward`;
           break;
-        case `run` : text = `Бежать без оглядки`;
+        case `run` : text = `Run without looking back`;
           break;
-        case `fight` : text = `Принять бой`;
+        case `fight` : text = `Take the fight`;
           break;
-        case `right` : text = `Пойти на право`;
+        case `right` : text = `Go to the right`;
           break;
       }
       return `
@@ -66,21 +66,21 @@ export default class Room extends Render {
               <li class="hero__skill">Luck: <span>${this.gameData.luck}</span></li>
             </ul>
             <ul class="hero__inventory">
-              <li class="hero__weapon hero__weapon--head">Голова: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--body">Тело: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Правая рука: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Левая рука: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--feet">Ноги: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--head">Head: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.head}</span></li>
             </ul>
             <a href="#" class="hero__link">
               <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
             </a>
           </div>
           <ul class="hero__impacts">
-            <li class="hero__negative" title="Негативное"></li>
-            <li class="hero__positive" title="Позитивное"></li>
-            <li class="hero__positive" title="Позитивное"></li>
-            <li class="hero__positive" title="Позитивное"></li>
+            <li class="hero__negative" title="Negative"></li>
+            <li class="hero__positive" title="Positive"></li>
+            <li class="hero__positive" title="Positive"></li>
+            <li class="hero__positive" title="Positive"></li>
           </ul>
         </div>
       </div>`;
@@ -99,7 +99,7 @@ export default class Room extends Render {
   }
 
   fight () {
-    new Fight();
+    new Fight(this.gameData);
   }
 
   run () {
@@ -119,7 +119,7 @@ export default class Room extends Render {
         break;
       case `fight` :
         console.log(`Принять бой`);
-        this.fight();
+        this.fight(this.gameData);
         break;
       case `right` : console.log(`Пойти на право`);
         break;

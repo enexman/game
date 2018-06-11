@@ -1,12 +1,12 @@
 .game-start {
   font-weight: 700;
-  width: 250px;
+  //width: 250px;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translateY(-50%) translateX(-50%);
   border: 1px solid $green;
-  padding: 20px;
+  padding: 23px 20px;
   text-transform: uppercase;
 
   label {
@@ -16,12 +16,13 @@
   input {
     outline: none;
     padding: 5px 10px;
-    width: 165px;
+    width: 155px;
     border: 1px solid $green;
     background-color: $black;
     color: $green;
     text-transform: uppercase;
     transition: all .2s;
+    font-size: $text-small;
 
     &:focus,
     &:hover {
@@ -35,10 +36,11 @@
     background-color: $black;
     border: 1px solid $green;
     color: $green;
-    font-size: 13px;
+    font-size: $text-small;
     padding: 5px 10px;
     text-transform: uppercase;
     transition: all .3s;
+    width: 70px;
 
     &:focus,
     &:hover {
