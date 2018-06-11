@@ -350,7 +350,7 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
       </div>`;
   }
 
-  goForward () {
+  go () {
     console.log('this.gameData', this.gameData);
     Object(_backend__WEBPACK_IMPORTED_MODULE_4__["moveHero"])(
       (res) => {
@@ -371,28 +371,22 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
   }
   clickNavigationHandler(evt) {
     switch (evt.target.value) {
-      case `left` : console.log(`Пойти на лево`);
+      case `left` : this.go();
         break;
-      case `forward` :
-        console.log(`Идти прямо`);
-        this.goForward();
+      case `forward` : this.go();
         break;
-      case `run` :
-        console.log(`Бежать без оглядки`);
-        this.run();
+      case `right` : this.go();
         break;
-      case `fight` :
-        console.log(`Принять бой`);
-        this.fight(this.gameData);
+      case `run` : this.run();
         break;
-      case `right` : console.log(`Пойти на право`);
+      case `fight` : this.fight(this.gameData);
         break;
     }
   }
 
   clickLinkInventoryHandler(evt) {
     evt.preventDefault();
-    new _inventory__WEBPACK_IMPORTED_MODULE_1__["default"](this.gameData);
+    new _inventory__WEBPACK_IMPORTED_MODULE_1__["default"](this.gameData, `room`);
   }
   addEventListeners() {
     this.clickNavigationHandler = this.clickNavigationHandler.bind(this);
@@ -413,7 +407,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Inventory; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/* harmony import */ var _fight__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 /**
  * Created by Murat on 10.06.2018.
  */
@@ -421,10 +416,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor(gameData) {
+  constructor(gameData, status) {
     super();
     this.gameData = gameData;
+    this.gamestatus = status;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
     this.closeInventory = this.element.querySelector('.inventory__close');
@@ -473,9 +471,13 @@ class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
   }
 
   clickCloseInventoryHandler() {
-    Object(_backend__WEBPACK_IMPORTED_MODULE_2__["loadHero"])(
+    Object(_backend__WEBPACK_IMPORTED_MODULE_3__["loadHero"])(
       (res) => {
         console.log('onSuccess', res);
+        if (this.gamestatus === `fight`) {
+          new _fight__WEBPACK_IMPORTED_MODULE_2__["default"](this.gameData);
+          return;
+        }
         new _room__WEBPACK_IMPORTED_MODULE_1__["default"](res);
       },
       (res) => console.log('onError', res),
@@ -11054,7 +11056,7 @@ class Fight extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
   clickLinkInventoryHandler(evt) {
     evt.preventDefault();
-    new _inventory__WEBPACK_IMPORTED_MODULE_1__["default"](this.gameData);
+    new _inventory__WEBPACK_IMPORTED_MODULE_1__["default"](this.gameData, `fight`);
   }
   addEventListeners() {
     this.clickLinkInventoryHandler = this.clickLinkInventoryHandler.bind(this);

@@ -86,7 +86,7 @@ export default class Room extends Render {
       </div>`;
   }
 
-  goForward () {
+  go () {
     console.log('this.gameData', this.gameData);
     moveHero(
       (res) => {
@@ -107,28 +107,22 @@ export default class Room extends Render {
   }
   clickNavigationHandler(evt) {
     switch (evt.target.value) {
-      case `left` : console.log(`Пойти на лево`);
+      case `left` : this.go();
         break;
-      case `forward` :
-        console.log(`Идти прямо`);
-        this.goForward();
+      case `forward` : this.go();
         break;
-      case `run` :
-        console.log(`Бежать без оглядки`);
-        this.run();
+      case `right` : this.go();
         break;
-      case `fight` :
-        console.log(`Принять бой`);
-        this.fight(this.gameData);
+      case `run` : this.run();
         break;
-      case `right` : console.log(`Пойти на право`);
+      case `fight` : this.fight(this.gameData);
         break;
     }
   }
 
   clickLinkInventoryHandler(evt) {
     evt.preventDefault();
-    new Inventory(this.gameData);
+    new Inventory(this.gameData, `room`);
   }
   addEventListeners() {
     this.clickNavigationHandler = this.clickNavigationHandler.bind(this);

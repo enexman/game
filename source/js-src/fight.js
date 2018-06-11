@@ -87,7 +87,7 @@ export default class Fight extends Render {
 
   clickLinkInventoryHandler(evt) {
     evt.preventDefault();
-    new Inventory(this.gameData);
+    new Inventory(this.gameData, `fight`);
   }
   addEventListeners() {
     this.clickLinkInventoryHandler = this.clickLinkInventoryHandler.bind(this);

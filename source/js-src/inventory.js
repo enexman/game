@@ -3,12 +3,15 @@
  */
 import Render from './render';
 import Room from './room';
+import Fight from './fight';
+
 import { loadHero } from './backend';
 
 export default class Inventory extends Render {
-  constructor(gameData) {
+  constructor(gameData, status) {
     super();
     this.gameData = gameData;
+    this.gamestatus = status;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
     this.closeInventory = this.element.querySelector('.inventory__close');
@@ -60,6 +63,10 @@ export default class Inventory extends Render {
     loadHero(
       (res) => {
         console.log('onSuccess', res);
+        if (this.gamestatus === `fight`) {
+          new Fight(this.gameData);
+          return;
+        }
         new Room(res);
       },
       (res) => console.log('onError', res),
