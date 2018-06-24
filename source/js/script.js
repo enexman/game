@@ -106,7 +106,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _game_start__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
 /**
  * Created by Murat on 07.06.2018.
  */
@@ -199,7 +199,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GameStart; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 /**
  * Created by Murat on 07.06.2018.
  */
@@ -259,9 +259,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Room; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-/* harmony import */ var _fight__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
+/* harmony import */ var _fight__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7);
 /**
  * Created by Murat on 08.06.2018.
  */
@@ -331,10 +331,10 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
             </ul>
             <ul class="hero__inventory">
               <li class="hero__weapon hero__weapon--head">Head: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.body}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.handRight}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.handLeft}</span></li>
+              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.feet}</span></li>
             </ul>
             <a href="#" class="hero__link">
               <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
@@ -407,8 +407,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Inventory; });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _fight__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
-/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+/* harmony import */ var _fight__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/* harmony import */ var _backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
 /**
  * Created by Murat on 10.06.2018.
  */
@@ -419,49 +419,50 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor(gameData, status) {
+  constructor(gameData, status, descriptionId) {
     super();
     this.gameData = gameData;
     this.gamestatus = status;
+    this.descriptionId = descriptionId;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
-    this.closeInventory = this.element.querySelector('.inventory__close');
+    this.closeBtn = this.element.querySelector('.inventory__close');
+    this.list = this.element.querySelector('.inventory__list');
+    this.dropBtn = this.element.querySelector('.inventory__btn--drop');
     this.addEventListeners();
     this.appendToTree();
     console.log('Inventory');
   }
 
   getHtmlString() {
+    const weapon =  !(this.gamestatus === `fight`);
+    const inventory = this.gameData.inventory.map((it) => {
+      return `
+        <li class="inventory__item" data-key="${it.id}">${it.name}</li>`
+    }).join(``);
+    const description = (idx) => {
+      const id = (idx) ? idx : null;
+      const data = this.gameData.inventory.filter((it) => it.id === id)[0];
+      return `
+        <div class="inventory__left">
+          <p class="inventory__description">
+            ${(data) ? data.description : ``}
+          </p>
+          <div class="inventory__buttons">
+            <button class="inventory__btn  inventory__btn--drop ${id ? `` : `invisible`}">Drop</button>
+            <button class="inventory__btn  ${id && weapon ? `` : `invisible`}">Take</button>
+          </div>
+        </div>`
+    };
+
     return `  
       <div class="inventory">
         <button class="inventory__close">X</button>
         <h2 class="inventory__title">Inventory</h2>
-        <div class="inventory__left">
-          <p class="inventory__description">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Ab accusantium consequatur, dicta doloremque, explicabo fuga in itaque
-            molestiae nobis quas quasi, quia quibusdam rem sequi similique sint vel.
-            Alias consectetur corporis cupiditate eum excepturi expedita, fuga
-            ipsum iste, nam porro, ut voluptatibus? Assumenda aut eius nemo nisi
-            quod sequi vel.
-          </p>
-          <div class="inventory__buttons">
-            <button class="inventory__btn">Drop</button>
-            <button class="inventory__btn">Take</button>
-          </div>
-        </div>
+        ${description(this.descriptionId)}
         <div class="inventory__right">
           <ul class="inventory__list">
-            <li class="inventory__item">inventory-1</li>
-            <li class="inventory__item">inventory-2</li>
-            <li class="inventory__item">inventory-3</li>
-            <li class="inventory__item">inventory-4</li>
-            <li class="inventory__item">inventory-5</li>
-            <li class="inventory__item">inventory-6</li>
-            <li class="inventory__item">inventory-7</li>
-            <li class="inventory__item">inventory-8</li>
-            <li class="inventory__item">inventory-9</li>
-            <li class="inventory__item">inventory-10</li>
+            ${inventory}
           </ul>
         </div>
         <div class="inventory__information">
@@ -470,7 +471,17 @@ class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
       </div>`;
   }
 
-  clickCloseInventoryHandler() {
+  clickListHandler(evt) {
+    new Inventory(this.gameData, this.gamestatus, evt.target.dataset.key);
+  }
+
+  clickDropBtnHandler() {
+    console.log('Drop')
+    this.gameData.inventory = this.gameData.inventory.filter((it) => it.id !== this.descriptionId);
+    new Inventory(this.gameData, this.gamestatus);
+  }
+
+  clickCloseHandler() {
     Object(_backend__WEBPACK_IMPORTED_MODULE_3__["loadHero"])(
       (res) => {
         console.log('onSuccess', res);
@@ -484,9 +495,16 @@ class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
       this.gameData.uid
     );
   }
+
   addEventListeners() {
-    this.clickCloseInventoryHandler = this.clickCloseInventoryHandler.bind(this);
-    this.closeInventory.addEventListener('click', this.clickCloseInventoryHandler);
+    this.clickCloseHandler = this.clickCloseHandler.bind(this);
+    this.closeBtn.addEventListener('click', this.clickCloseHandler);
+
+    this.clickListHandler = this.clickListHandler.bind(this);
+    this.list.addEventListener('click', this.clickListHandler);
+
+    this.clickDropBtnHandler = this.clickDropBtnHandler.bind(this);
+    this.dropBtn.addEventListener('click', this.clickDropBtnHandler);
   }
 }
 
@@ -497,11 +515,118 @@ class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Fight; });
+/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/**
+ * Created by Murat on 10.06.2018.
+ */
+
+
+
+class Fight extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
+  constructor(gameData) {
+    super();
+    this.gameData = gameData;
+    this.htmlString = this.getHtmlString();
+    this.element = this.createElement(this.htmlString);
+    this.linkInventory = this.element.querySelector('.hero__link');
+    this.addEventListeners();
+    // this.form = this.element.querySelector('.game-start');
+    this.appendToTree();
+    console.log('Fight');
+  }
+
+  getHtmlString() {
+    return `  
+      <div class="fight">
+        <div class="fight__monster  monster">
+          <a href="#" class="monster__link">
+            <img src="http://placehold.it/150x100" alt="monster image" class="monster__image">
+            <div class="monster__description">
+              <p class="monster__text">
+                <span>Characteristic: </span>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Alias aliquid dolorum error exercitationem facilis iure odit
+                Alias aliquid dolorum error exercitationem facilis iure odit
+              </p>
+            </div>
+          </a>
+          <div class="monster__wrap">
+            <h2 class="monster__name">Dragon <span>10 level</span></h2>
+            <p class="monster__text">
+              <span>Indecency: </span>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet animi
+              commodi corporis id provident rem saepe sed suscipit tempore voluptas.
+              Alias aliquid dolorum error exercitationem facilis iure odit
+            </p>
+          </div>
+        </div>
+        <div class="fight__battle  battle">
+          <p class="battle__message">Success</p>
+          <div class="battle__wrap">
+            <p class="battle__warrior">Hero</p>
+            <div class="battle__progress"></div>
+            <p class="battle__warrior">Dragon</p>
+          </div>
+          <button class="battle__attack">Attack</button>
+        </div>
+        <div class="room__hero  hero">
+          <div class="hero__wrap">
+            <p class="hero__race">Race: <span>${this.gameData.race}</span></p>
+            <p class="hero__class">Class: <span>${this.gameData.class}</span></p>
+          </div>
+          <div class="hero__wrap">
+            <ul class="hero__skills">
+              <li class="hero__skill">Name: <span>${this.gameData.name}</span></li>
+              <li class="hero__skill">Level: <span>${this.gameData.level}</span></li>
+              <li class="hero__skill">Strength: <span>${this.gameData.strength}</span></li>
+              <li class="hero__skill">Agility: <span>${this.gameData.agility}</span></li>
+              <li class="hero__skill">Luck: <span>${this.gameData.luck}</span></li>
+            </ul>
+            <ul class="hero__inventory">
+              <li class="hero__weapon hero__weapon--head">Head: <span>${this.gameData.weapons.head}</span></li>
+              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.body}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.handRight}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.handLeft}</span></li>
+              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.feet}</span></li>
+            </ul>
+            <a href="#" class="hero__link">
+              <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
+            </a>
+          </div>
+          <ul class="hero__impacts">
+            <li class="hero__negative" title="Negative"></li>
+            <li class="hero__positive" title="Positive"></li>
+            <li class="hero__positive" title="Positive"></li>
+            <li class="hero__positive" title="Positive"></li>
+          </ul>
+        </div>
+      </div>`;
+  }
+
+  clickLinkInventoryHandler(evt) {
+    evt.preventDefault();
+    new _inventory__WEBPACK_IMPORTED_MODULE_1__["default"](this.gameData, `fight`);
+  }
+  addEventListeners() {
+    this.clickLinkInventoryHandler = this.clickLinkInventoryHandler.bind(this);
+    this.linkInventory.addEventListener('click', this.clickLinkInventoryHandler);
+  }
+}
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createHero", function() { return createHero; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadHero", function() { return loadHero; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "moveHero", function() { return moveHero; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateHero", function() { return updateHero; });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * Created by Murat on 07.06.2018.
@@ -550,14 +675,14 @@ function loadHero (onSuccess, onError, uid) {
 }
 
 function moveHero (onSuccess, onError, data) {
-  const jsonData = JSON.stringify(data);
+  const json = JSON.stringify(data);
   const settings = {
     async: true,
     crossDomain: true,
     url: `${API}move`,
     method: 'POST',
     data: {
-      jsonData
+      json
     },
     headers: {
       accept: 'application/json'
@@ -588,7 +713,7 @@ function updateHero (onSuccess, onError, data) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10956,113 +11081,6 @@ if ( !noGlobal ) {
 
 return jQuery;
 } );
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Fight; });
-/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-/**
- * Created by Murat on 10.06.2018.
- */
-
-
-
-class Fight extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor(gameData) {
-    super();
-    this.gameData = gameData;
-    this.htmlString = this.getHtmlString();
-    this.element = this.createElement(this.htmlString);
-    this.linkInventory = this.element.querySelector('.hero__link');
-    this.addEventListeners();
-    // this.form = this.element.querySelector('.game-start');
-    this.appendToTree();
-    console.log('Fight');
-  }
-
-  getHtmlString() {
-    return `  
-      <div class="fight">
-        <div class="fight__monster  monster">
-          <a href="#" class="monster__link">
-            <img src="http://placehold.it/150x100" alt="monster image" class="monster__image">
-            <div class="monster__description">
-              <p class="monster__text">
-                <span>Characteristic: </span>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Alias aliquid dolorum error exercitationem facilis iure odit
-                Alias aliquid dolorum error exercitationem facilis iure odit
-              </p>
-            </div>
-          </a>
-          <div class="monster__wrap">
-            <h2 class="monster__name">Dragon <span>10 level</span></h2>
-            <p class="monster__text">
-              <span>Indecency: </span>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet animi
-              commodi corporis id provident rem saepe sed suscipit tempore voluptas.
-              Alias aliquid dolorum error exercitationem facilis iure odit
-            </p>
-          </div>
-        </div>
-        <div class="fight__battle  battle">
-          <p class="battle__message">Success</p>
-          <div class="battle__wrap">
-            <p class="battle__warrior">Hero</p>
-            <div class="battle__progress"></div>
-            <p class="battle__warrior">Dragon</p>
-          </div>
-          <button class="battle__attack">Attack</button>
-        </div>
-        <div class="room__hero  hero">
-          <div class="hero__wrap">
-            <p class="hero__race">Race: <span>${this.gameData.race}</span></p>
-            <p class="hero__class">Class: <span>${this.gameData.class}</span></p>
-          </div>
-          <div class="hero__wrap">
-            <ul class="hero__skills">
-              <li class="hero__skill">Name: <span>${this.gameData.name}</span></li>
-              <li class="hero__skill">Level: <span>${this.gameData.level}</span></li>
-              <li class="hero__skill">Strength: <span>${this.gameData.strength}</span></li>
-              <li class="hero__skill">Agility: <span>${this.gameData.agility}</span></li>
-              <li class="hero__skill">Luck: <span>${this.gameData.luck}</span></li>
-            </ul>
-            <ul class="hero__inventory">
-              <li class="hero__weapon hero__weapon--head">Head: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.head}</span></li>
-            </ul>
-            <a href="#" class="hero__link">
-              <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
-            </a>
-          </div>
-          <ul class="hero__impacts">
-            <li class="hero__negative" title="Negative"></li>
-            <li class="hero__positive" title="Positive"></li>
-            <li class="hero__positive" title="Positive"></li>
-            <li class="hero__positive" title="Positive"></li>
-          </ul>
-        </div>
-      </div>`;
-  }
-
-  clickLinkInventoryHandler(evt) {
-    evt.preventDefault();
-    new _inventory__WEBPACK_IMPORTED_MODULE_1__["default"](this.gameData, `fight`);
-  }
-  addEventListeners() {
-    this.clickLinkInventoryHandler = this.clickLinkInventoryHandler.bind(this);
-    this.linkInventory.addEventListener('click', this.clickLinkInventoryHandler);
-  }
-}
 
 
 /***/ }),

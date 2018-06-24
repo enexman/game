@@ -8,49 +8,50 @@ import Fight from './fight';
 import { loadHero } from './backend';
 
 export default class Inventory extends Render {
-  constructor(gameData, status) {
+  constructor(gameData, status, descriptionId) {
     super();
     this.gameData = gameData;
     this.gamestatus = status;
+    this.descriptionId = descriptionId;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
-    this.closeInventory = this.element.querySelector('.inventory__close');
+    this.closeBtn = this.element.querySelector('.inventory__close');
+    this.list = this.element.querySelector('.inventory__list');
+    this.dropBtn = this.element.querySelector('.inventory__btn--drop');
     this.addEventListeners();
     this.appendToTree();
     console.log('Inventory');
   }
 
   getHtmlString() {
+    const weapon =  !(this.gamestatus === `fight`);
+    const inventory = this.gameData.inventory.map((it) => {
+      return `
+        <li class="inventory__item" data-key="${it.id}">${it.name}</li>`
+    }).join(``);
+    const description = (idx) => {
+      const id = (idx) ? idx : null;
+      const data = this.gameData.inventory.filter((it) => it.id === id)[0];
+      return `
+        <div class="inventory__left">
+          <p class="inventory__description">
+            ${(data) ? data.description : ``}
+          </p>
+          <div class="inventory__buttons">
+            <button class="inventory__btn  inventory__btn--drop ${id ? `` : `invisible`}">Drop</button>
+            <button class="inventory__btn  ${id && weapon ? `` : `invisible`}">Take</button>
+          </div>
+        </div>`
+    };
+
     return `  
       <div class="inventory">
         <button class="inventory__close">X</button>
         <h2 class="inventory__title">Inventory</h2>
-        <div class="inventory__left">
-          <p class="inventory__description">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Ab accusantium consequatur, dicta doloremque, explicabo fuga in itaque
-            molestiae nobis quas quasi, quia quibusdam rem sequi similique sint vel.
-            Alias consectetur corporis cupiditate eum excepturi expedita, fuga
-            ipsum iste, nam porro, ut voluptatibus? Assumenda aut eius nemo nisi
-            quod sequi vel.
-          </p>
-          <div class="inventory__buttons">
-            <button class="inventory__btn">Drop</button>
-            <button class="inventory__btn">Take</button>
-          </div>
-        </div>
+        ${description(this.descriptionId)}
         <div class="inventory__right">
           <ul class="inventory__list">
-            <li class="inventory__item">inventory-1</li>
-            <li class="inventory__item">inventory-2</li>
-            <li class="inventory__item">inventory-3</li>
-            <li class="inventory__item">inventory-4</li>
-            <li class="inventory__item">inventory-5</li>
-            <li class="inventory__item">inventory-6</li>
-            <li class="inventory__item">inventory-7</li>
-            <li class="inventory__item">inventory-8</li>
-            <li class="inventory__item">inventory-9</li>
-            <li class="inventory__item">inventory-10</li>
+            ${inventory}
           </ul>
         </div>
         <div class="inventory__information">
@@ -59,7 +60,17 @@ export default class Inventory extends Render {
       </div>`;
   }
 
-  clickCloseInventoryHandler() {
+  clickListHandler(evt) {
+    new Inventory(this.gameData, this.gamestatus, evt.target.dataset.key);
+  }
+
+  clickDropBtnHandler() {
+    console.log('Drop')
+    this.gameData.inventory = this.gameData.inventory.filter((it) => it.id !== this.descriptionId);
+    new Inventory(this.gameData, this.gamestatus);
+  }
+
+  clickCloseHandler() {
     loadHero(
       (res) => {
         console.log('onSuccess', res);
@@ -73,8 +84,15 @@ export default class Inventory extends Render {
       this.gameData.uid
     );
   }
+
   addEventListeners() {
-    this.clickCloseInventoryHandler = this.clickCloseInventoryHandler.bind(this);
-    this.closeInventory.addEventListener('click', this.clickCloseInventoryHandler);
+    this.clickCloseHandler = this.clickCloseHandler.bind(this);
+    this.closeBtn.addEventListener('click', this.clickCloseHandler);
+
+    this.clickListHandler = this.clickListHandler.bind(this);
+    this.list.addEventListener('click', this.clickListHandler);
+
+    this.clickDropBtnHandler = this.clickDropBtnHandler.bind(this);
+    this.dropBtn.addEventListener('click', this.clickDropBtnHandler);
   }
 }

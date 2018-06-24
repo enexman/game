@@ -45,14 +45,14 @@ export function loadHero (onSuccess, onError, uid) {
 }
 
 export function moveHero (onSuccess, onError, data) {
-  const jsonData = JSON.stringify(data);
+  const json = JSON.stringify(data);
   const settings = {
     async: true,
     crossDomain: true,
     url: `${API}move`,
     method: 'POST',
     data: {
-      jsonData
+      json
     },
     headers: {
       accept: 'application/json'
