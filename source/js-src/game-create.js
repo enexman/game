@@ -21,7 +21,7 @@ export default class GameCreate extends Render {
   getHtmlString() {
     return `  
       <div class="game-create">
-        <button class="game-create__btn  game-create__btn--start-game">Enter the game</button>
+        <button class="game-create__btn  game-create__btn--start-game">Continue the game</button>
         <button class="game-create__btn  game-create__btn--new-game">New game</button>
       </div>`;
   }
@@ -30,10 +30,7 @@ export default class GameCreate extends Render {
     console.log('uid', uid);
     if(uid) {
       loadHero(
-        (res) => {
-          console.log('onSuccess', res);
-          new Room(res);
-        },
+        (res) => new Room(res, true),
         (res) => console.log('onError', res),
         uid
       );

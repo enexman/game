@@ -130,7 +130,7 @@ class GameCreate extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
   getHtmlString() {
     return `  
       <div class="game-create">
-        <button class="game-create__btn  game-create__btn--start-game">Enter the game</button>
+        <button class="game-create__btn  game-create__btn--start-game">Continue the game</button>
         <button class="game-create__btn  game-create__btn--new-game">New game</button>
       </div>`;
   }
@@ -139,10 +139,7 @@ class GameCreate extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
     console.log('uid', uid);
     if(uid) {
       Object(_backend__WEBPACK_IMPORTED_MODULE_3__["loadHero"])(
-        (res) => {
-          console.log('onSuccess', res);
-          new _room__WEBPACK_IMPORTED_MODULE_2__["default"](res);
-        },
+        (res) => new _room__WEBPACK_IMPORTED_MODULE_2__["default"](res, true),
         (res) => console.log('onError', res),
         uid
       );
@@ -272,19 +269,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor(gameData) {
+  constructor(gameData, isClosed) {
     super();
     this.gameData = gameData;
+    this.isClosed = isClosed;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
     this.navigation = this.element.querySelector('.navigation');
     this.linkInventory = this.element.querySelector('.hero__link');
     this.addEventListeners();
     this.appendToTree();
-    console.log('Room');
+    this.openModal();
+    console.log('Room', this.gameData);
   }
 
   getHtmlString() {
+
     const navigation = this.gameData.room.navigation.map((it) => {
       let text =``;
       switch (it) {
@@ -305,6 +305,16 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
           <label for="${it}" class="navigation__label">${text}</label>
         </div>`
     }).join(``);
+    const getSum = (param) => {
+      let sum = this.gameData[param];
+      for (let key in this.gameData.weapons) {
+        if (this.gameData.weapons[key].update === param) {
+          sum += this.gameData.weapons[key].sum;
+        }
+      }
+      console.log('sum', sum)
+      return sum
+    };
     return `  
       <div class="room">
         <div class="room__stat  stat">
@@ -325,16 +335,16 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
             <ul class="hero__skills">
               <li class="hero__skill">Name: <span>${this.gameData.name}</span></li>
               <li class="hero__skill">Level: <span>${this.gameData.level}</span></li>
-              <li class="hero__skill">Strength: <span>${this.gameData.strength}</span></li>
-              <li class="hero__skill">Agility: <span>${this.gameData.agility}</span></li>
-              <li class="hero__skill">Luck: <span>${this.gameData.luck}</span></li>
+              <li class="hero__skill">Strength: <span>${getSum(`strength`)}</span></li>
+              <li class="hero__skill">Agility: <span>${getSum(`agility`)}</span></li>
+              <li class="hero__skill">Luck: <span>${getSum(`luck`)}</span></li>
             </ul>
             <ul class="hero__inventory">
-              <li class="hero__weapon hero__weapon--head">Head: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.body}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.handRight}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.handLeft}</span></li>
-              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.feet}</span></li>
+              <li class="hero__weapon hero__weapon--head">Head: <span>${this.gameData.weapons.head.name}</span></li>
+              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.body.name}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.handRight.name}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.handLeft.name}</span></li>
+              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.feet.name}</span></li>
             </ul>
             <a href="#" class="hero__link">
               <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
@@ -350,24 +360,24 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
       </div>`;
   }
 
-  go () {
-    console.log('this.gameData', this.gameData);
+  go() {
     Object(_backend__WEBPACK_IMPORTED_MODULE_4__["moveHero"])(
-      (res) => {
-        console.log('onSuccess', res);
-        new Room(res);
-      },
+      (res) => new Room(res),
       (res) => console.log('onError', res),
       this.gameData
     );
   }
 
-  fight () {
+  fight() {
     new _fight__WEBPACK_IMPORTED_MODULE_2__["default"](this.gameData);
   }
 
-  run () {
-    new _modal__WEBPACK_IMPORTED_MODULE_3__["default"]();
+  run() {
+    Object(_backend__WEBPACK_IMPORTED_MODULE_4__["moveHero"])(
+      (res) => new Room(res),
+      (res) => console.log('onError', res),
+      this.gameData
+    );
   }
   clickNavigationHandler(evt) {
     switch (evt.target.value) {
@@ -381,6 +391,16 @@ class Room extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
         break;
       case `fight` : this.fight(this.gameData);
         break;
+    }
+  }
+
+  openModal() {
+    if (
+      this.gameData.room.type === `book` ||
+      this.gameData.room.type === `treasure` &&
+      !this.isClosed
+    ) {
+      new _modal__WEBPACK_IMPORTED_MODULE_3__["default"](this.gameData);
     }
   }
 
@@ -429,6 +449,7 @@ class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
     this.closeBtn = this.element.querySelector('.inventory__close');
     this.list = this.element.querySelector('.inventory__list');
     this.dropBtn = this.element.querySelector('.inventory__btn--drop');
+    this.takeBtn = this.element.querySelector('.inventory__btn--take');
     this.addEventListeners();
     this.appendToTree();
     console.log('Inventory');
@@ -450,7 +471,7 @@ class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
           </p>
           <div class="inventory__buttons">
             <button class="inventory__btn  inventory__btn--drop ${id ? `` : `invisible`}">Drop</button>
-            <button class="inventory__btn  ${id && weapon ? `` : `invisible`}">Take</button>
+            <button class="inventory__btn  inventory__btn--take ${id && weapon ? `` : `invisible`}">Take</button>
           </div>
         </div>`
     };
@@ -476,9 +497,30 @@ class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
   }
 
   clickDropBtnHandler() {
-    console.log('Drop')
+    console.log('Drop', this.descriptionId)
     this.gameData.inventory = this.gameData.inventory.filter((it) => it.id !== this.descriptionId);
-    new Inventory(this.gameData, this.gamestatus);
+    Object(_backend__WEBPACK_IMPORTED_MODULE_3__["updateHero"])(
+      (res) => new Inventory(res, this.gamestatus),
+      (res) => console.log('onError', res),
+      this.gameData
+    );
+  }
+
+  clickTakeBtnHandler() {
+    console.log('Take', this.descriptionId);
+    const inventoryElement = this.gameData.inventory.find((it) => it.id === this.descriptionId);
+    this.gameData.inventory = this.gameData.inventory.filter((it) => it.id !== this.descriptionId);
+
+    if(this.gameData.weapons[inventoryElement.use].id) {
+      this.gameData.inventory.push(this.gameData.weapons[inventoryElement.use]);
+    }
+
+    this.gameData.weapons[inventoryElement.use] = inventoryElement;
+    Object(_backend__WEBPACK_IMPORTED_MODULE_3__["updateHero"])(
+      (res) => new Inventory(res, this.gamestatus),
+      (res) => console.log('onError', res),
+      this.gameData
+    );
   }
 
   clickCloseHandler() {
@@ -489,7 +531,7 @@ class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
           new _fight__WEBPACK_IMPORTED_MODULE_2__["default"](this.gameData);
           return;
         }
-        new _room__WEBPACK_IMPORTED_MODULE_1__["default"](res);
+        new _room__WEBPACK_IMPORTED_MODULE_1__["default"](res, true);
       },
       (res) => console.log('onError', res),
       this.gameData.uid
@@ -505,6 +547,9 @@ class Inventory extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
     this.clickDropBtnHandler = this.clickDropBtnHandler.bind(this);
     this.dropBtn.addEventListener('click', this.clickDropBtnHandler);
+
+    this.clickTakeBtnHandler = this.clickTakeBtnHandler.bind(this);
+    this.takeBtn.addEventListener('click', this.clickTakeBtnHandler);
   }
 }
 
@@ -695,12 +740,15 @@ function moveHero (onSuccess, onError, data) {
 }
 
 function updateHero (onSuccess, onError, data) {
+  const json = JSON.stringify(data);
   const settings = {
     async: true,
     crossDomain: true,
     url: `${API}update`,
     method: 'POST',
-    data,
+    data: {
+      json
+    },
     headers: {
       accept: 'application/json'
     }
@@ -11097,11 +11145,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Modal extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor() {
+  constructor(gameData) {
     super();
+    this.gameData = gameData;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
-    // this.form = this.element.querySelector('.game-start');
+    this.okBtn = this.element.querySelector('.modal__btn');
     this.addEventListeners();
     this.appendToTree();
     console.log('Modal');
@@ -11111,7 +11160,7 @@ class Modal extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
     return `  
       <div class="modal">
         <div class="modal__wrap">
-          <p class="modal__message">Message</p>
+          <p class="modal__message">${this.gameData.room.message}</p>
           <button class="modal__btn">Ok</button>
         </div>
       </div>`;
@@ -11120,11 +11169,12 @@ class Modal extends _render__WEBPACK_IMPORTED_MODULE_0__["default"] {
   appendToTree(container = document.body) {
     container.appendChild(this.element);
   }
-  clickGameStartBtnHandler() {
+  clickOkBtnHandler() {
+    document.querySelector('.modal').remove();
   }
   addEventListeners() {
-    // this.clickGameStartBtnHandler = this.clickGameStartBtnHandler.bind(this);
-    // this.startGameBtn.addEventListener('click', this.clickGameStartBtnHandler);
+    this.clickOkBtnHandler = this.clickOkBtnHandler.bind(this);
+    this.okBtn.addEventListener('click', this.clickOkBtnHandler);
   }
 }
 

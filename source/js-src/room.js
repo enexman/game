@@ -8,19 +8,22 @@ import Modal from './modal';
 import { moveHero } from './backend';
 
 export default class Room extends Render {
-  constructor(gameData) {
+  constructor(gameData, isClosed) {
     super();
     this.gameData = gameData;
+    this.isClosed = isClosed;
     this.htmlString = this.getHtmlString();
     this.element = this.createElement(this.htmlString);
     this.navigation = this.element.querySelector('.navigation');
     this.linkInventory = this.element.querySelector('.hero__link');
     this.addEventListeners();
     this.appendToTree();
-    console.log('Room');
+    this.openModal();
+    console.log('Room', this.gameData);
   }
 
   getHtmlString() {
+
     const navigation = this.gameData.room.navigation.map((it) => {
       let text =``;
       switch (it) {
@@ -41,6 +44,16 @@ export default class Room extends Render {
           <label for="${it}" class="navigation__label">${text}</label>
         </div>`
     }).join(``);
+    const getSum = (param) => {
+      let sum = this.gameData[param];
+      for (let key in this.gameData.weapons) {
+        if (this.gameData.weapons[key].update === param) {
+          sum += this.gameData.weapons[key].sum;
+        }
+      }
+      console.log('sum', sum)
+      return sum
+    };
     return `  
       <div class="room">
         <div class="room__stat  stat">
@@ -61,16 +74,16 @@ export default class Room extends Render {
             <ul class="hero__skills">
               <li class="hero__skill">Name: <span>${this.gameData.name}</span></li>
               <li class="hero__skill">Level: <span>${this.gameData.level}</span></li>
-              <li class="hero__skill">Strength: <span>${this.gameData.strength}</span></li>
-              <li class="hero__skill">Agility: <span>${this.gameData.agility}</span></li>
-              <li class="hero__skill">Luck: <span>${this.gameData.luck}</span></li>
+              <li class="hero__skill">Strength: <span>${getSum(`strength`)}</span></li>
+              <li class="hero__skill">Agility: <span>${getSum(`agility`)}</span></li>
+              <li class="hero__skill">Luck: <span>${getSum(`luck`)}</span></li>
             </ul>
             <ul class="hero__inventory">
-              <li class="hero__weapon hero__weapon--head">Head: <span>${this.gameData.weapons.head}</span></li>
-              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.body}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.handRight}</span></li>
-              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.handLeft}</span></li>
-              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.feet}</span></li>
+              <li class="hero__weapon hero__weapon--head">Head: <span>${this.gameData.weapons.head.name}</span></li>
+              <li class="hero__weapon hero__weapon--body">Body: <span>${this.gameData.weapons.body.name}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Right hand: <span>${this.gameData.weapons.handRight.name}</span></li>
+              <li class="hero__weapon hero__weapon--hand">Left hand: <span>${this.gameData.weapons.handLeft.name}</span></li>
+              <li class="hero__weapon hero__weapon--feet">Feet: <span>${this.gameData.weapons.feet.name}</span></li>
             </ul>
             <a href="#" class="hero__link">
               <img src="http://placehold.it/150x100" alt="hero image" class="hero__image">
@@ -86,24 +99,24 @@ export default class Room extends Render {
       </div>`;
   }
 
-  go () {
-    console.log('this.gameData', this.gameData);
+  go() {
     moveHero(
-      (res) => {
-        console.log('onSuccess', res);
-        new Room(res);
-      },
+      (res) => new Room(res),
       (res) => console.log('onError', res),
       this.gameData
     );
   }
 
-  fight () {
+  fight() {
     new Fight(this.gameData);
   }
 
-  run () {
-    new Modal();
+  run() {
+    moveHero(
+      (res) => new Room(res),
+      (res) => console.log('onError', res),
+      this.gameData
+    );
   }
   clickNavigationHandler(evt) {
     switch (evt.target.value) {
@@ -117,6 +130,16 @@ export default class Room extends Render {
         break;
       case `fight` : this.fight(this.gameData);
         break;
+    }
+  }
+
+  openModal() {
+    if (
+      this.gameData.room.type === `book` ||
+      this.gameData.room.type === `treasure` &&
+      !this.isClosed
+    ) {
+      new Modal(this.gameData);
     }
   }
 

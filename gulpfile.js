@@ -60,7 +60,7 @@ gulp.task('useref', function() {
   return gulp.src('source/*.html')
     //.pipe(assets)
     .pipe(useref())
-    .pipe(gulpif('*.js', uglify()))
+    .pipe(gulpif('source/js/*.js', uglify()))
     .pipe(gulpif('*.css', csso({restructure: true,
         sourceMap: false,
         debug: true

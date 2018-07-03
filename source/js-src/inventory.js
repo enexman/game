@@ -5,7 +5,7 @@ import Render from './render';
 import Room from './room';
 import Fight from './fight';
 
-import { loadHero } from './backend';
+import { loadHero, updateHero } from './backend';
 
 export default class Inventory extends Render {
   constructor(gameData, status, descriptionId) {
@@ -18,6 +18,7 @@ export default class Inventory extends Render {
     this.closeBtn = this.element.querySelector('.inventory__close');
     this.list = this.element.querySelector('.inventory__list');
     this.dropBtn = this.element.querySelector('.inventory__btn--drop');
+    this.takeBtn = this.element.querySelector('.inventory__btn--take');
     this.addEventListeners();
     this.appendToTree();
     console.log('Inventory');
@@ -39,7 +40,7 @@ export default class Inventory extends Render {
           </p>
           <div class="inventory__buttons">
             <button class="inventory__btn  inventory__btn--drop ${id ? `` : `invisible`}">Drop</button>
-            <button class="inventory__btn  ${id && weapon ? `` : `invisible`}">Take</button>
+            <button class="inventory__btn  inventory__btn--take ${id && weapon ? `` : `invisible`}">Take</button>
           </div>
         </div>`
     };
@@ -65,9 +66,30 @@ export default class Inventory extends Render {
   }
 
   clickDropBtnHandler() {
-    console.log('Drop')
+    console.log('Drop', this.descriptionId)
     this.gameData.inventory = this.gameData.inventory.filter((it) => it.id !== this.descriptionId);
-    new Inventory(this.gameData, this.gamestatus);
+    updateHero(
+      (res) => new Inventory(res, this.gamestatus),
+      (res) => console.log('onError', res),
+      this.gameData
+    );
+  }
+
+  clickTakeBtnHandler() {
+    console.log('Take', this.descriptionId);
+    const inventoryElement = this.gameData.inventory.find((it) => it.id === this.descriptionId);
+    this.gameData.inventory = this.gameData.inventory.filter((it) => it.id !== this.descriptionId);
+
+    if(this.gameData.weapons[inventoryElement.use].id) {
+      this.gameData.inventory.push(this.gameData.weapons[inventoryElement.use]);
+    }
+
+    this.gameData.weapons[inventoryElement.use] = inventoryElement;
+    updateHero(
+      (res) => new Inventory(res, this.gamestatus),
+      (res) => console.log('onError', res),
+      this.gameData
+    );
   }
 
   clickCloseHandler() {
@@ -78,7 +100,7 @@ export default class Inventory extends Render {
           new Fight(this.gameData);
           return;
         }
-        new Room(res);
+        new Room(res, true);
       },
       (res) => console.log('onError', res),
       this.gameData.uid
@@ -94,5 +116,8 @@ export default class Inventory extends Render {
 
     this.clickDropBtnHandler = this.clickDropBtnHandler.bind(this);
     this.dropBtn.addEventListener('click', this.clickDropBtnHandler);
+
+    this.clickTakeBtnHandler = this.clickTakeBtnHandler.bind(this);
+    this.takeBtn.addEventListener('click', this.clickTakeBtnHandler);
   }
 }

@@ -65,12 +65,15 @@ export function moveHero (onSuccess, onError, data) {
 }
 
 export function updateHero (onSuccess, onError, data) {
+  const json = JSON.stringify(data);
   const settings = {
     async: true,
     crossDomain: true,
     url: `${API}update`,
     method: 'POST',
-    data,
+    data: {
+      json
+    },
     headers: {
       accept: 'application/json'
     }
